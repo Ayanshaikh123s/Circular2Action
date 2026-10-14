@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+/* Authentication */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background: #f4f7fb;
+}
+
+.auth-card {
+  width: 430px;
+  background: #ffffff;
+  padding: 38px;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(20, 40, 70, 0.10);
+}
+
+.signup-card {
+  width: 460px;
+}
+
+.auth-logo {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #2563eb;
+  color: white;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.auth-card h1 {
+  text-align: center;
+  margin: 0;
+  font-size: 27px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #718096;
+  font-size: 14px;
+  margin: 9px 0 25px;
+}
+
+/* Role */
+
+.role-switch {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.role-switch button {
+  flex: 1;
+  padding: 11px;
+  border: 1px solid #d9e0ea;
+  background: #ffffff;
+  border-radius: 8px;
+  color: #4a5568;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.role-switch button.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+/* Form */
+
+.form-group {
+  margin-bottom: 17px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #303b4f;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  border-color: #2563eb;
+}
+
+.forgot-password {
+  text-align: right;
+  color: #2563eb;
+  font-size: 13px;
+  margin: -3px 0 20px;
+  cursor: pointer;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #1d4ed8;
+}
+
+.auth-bottom-text {
+  text-align: center;
+  margin: 22px 0 0;
+  color: #718096;
+  font-size: 14px;
+}
+
+.auth-bottom-text a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
