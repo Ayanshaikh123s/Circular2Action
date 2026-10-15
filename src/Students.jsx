@@ -1,172 +1,28 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { studentAPI } from "./api";
 import "./Students.css";
 
-const initialStudents = [
-  {
-    id: 1,
-    name: "Aarav Shah",
-    email: "aarav.shah@college.com",
-    phone: "9876543210",
-    course: "BCA",
-    semester: "Semester 1",
-    department: "Computer Applications",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Meera Patel",
-    email: "meera.patel@college.com",
-    phone: "9876543211",
-    course: "BCA",
-    semester: "Semester 3",
-    department: "Computer Applications",
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Riya Desai",
-    email: "riya.desai@college.com",
-    phone: "9876543212",
-    course: "BCA",
-    semester: "Semester 5",
-    department: "Computer Applications",
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "Kabir Mehta",
-    email: "kabir.mehta@college.com",
-    phone: "9876543213",
-    course: "BCA",
-    semester: "Semester 6",
-    department: "Computer Applications",
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    name: "Ananya Shah",
-    email: "ananya.shah@college.com",
-    phone: "9876543214",
-    course: "B.Com",
-    semester: "Semester 2",
-    department: "Commerce",
-    status: "Active",
-  },
-  {
-    id: 6,
-    name: "Dev Joshi",
-    email: "dev.joshi@college.com",
-    phone: "9876543215",
-    course: "B.Com",
-    semester: "Semester 4",
-    department: "Commerce",
-    status: "Active",
-  },
-  {
-    id: 7,
-    name: "Sana Khan",
-    email: "sana.khan@college.com",
-    phone: "9876543216",
-    course: "B.Com",
-    semester: "Semester 6",
-    department: "Commerce",
-    status: "Active",
-  },
-  {
-    id: 8,
-    name: "Rahul Mehta",
-    email: "rahul.mehta@college.com",
-    phone: "9876543217",
-    course: "BBA",
-    semester: "Semester 1",
-    department: "Business Administration",
-    status: "Active",
-  },
-  {
-    id: 9,
-    name: "Ishita Patel",
-    email: "ishita.patel@college.com",
-    phone: "9876543218",
-    course: "BBA",
-    semester: "Semester 3",
-    department: "Business Administration",
-    status: "Active",
-  },
-  {
-    id: 10,
-    name: "Yash Shah",
-    email: "yash.shah@college.com",
-    phone: "9876543219",
-    course: "BBA",
-    semester: "Semester 5",
-    department: "Business Administration",
-    status: "Inactive",
-  },
-  {
-    id: 11,
-    name: "Sahil Verma",
-    email: "sahil.verma@college.com",
-    phone: "9876543220",
-    course: "MCA",
-    semester: "Semester 1",
-    department: "Computer Applications",
-    status: "Active",
-  },
-  {
-    id: 12,
-    name: "Nisha Shah",
-    email: "nisha.shah@college.com",
-    phone: "9876543221",
-    course: "MCA",
-    semester: "Semester 3",
-    department: "Computer Applications",
-    status: "Active",
-  },
-  {
-    id: 13,
-    name: "Harsh Patel",
-    email: "harsh.patel@college.com",
-    phone: "9876543222",
-    course: "M.Com",
-    semester: "Semester 2",
-    department: "Commerce",
-    status: "Active",
-  },
-  {
-    id: 14,
-    name: "Pooja Mehta",
-    email: "pooja.mehta@college.com",
-    phone: "9876543223",
-    course: "M.Com",
-    semester: "Semester 4",
-    department: "Commerce",
-    status: "Active",
-  },
-  {
-    id: 15,
-    name: "Karan Desai",
-    email: "karan.desai@college.com",
-    phone: "9876543224",
-    course: "MBA",
-    semester: "Semester 1",
-    department: "Management",
-    status: "Active",
-  },
-  {
-    id: 16,
-    name: "Neha Joshi",
-    email: "neha.joshi@college.com",
-    phone: "9876543225",
-    course: "MBA",
-    semester: "Semester 3",
-    department: "Management",
-    status: "Inactive",
-  },
-];
-
 function Students() {
-  const [students, setStudents] = useState(initialStudents);
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchStudents = async () => {
+    try {
+      setLoading(true);
+      const res = await studentAPI.getAll();
+      const list = Array.isArray(res) ? res : (res?.students || []);
+      setStudents(list);
+    } catch (err) {
+      console.error("Error fetching students:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [courseFilter, setCourseFilter] = useState("All Courses");
@@ -188,9 +44,9 @@ function Students() {
   const filteredStudents = useMemo(() => {
     return students.filter((student) => {
       const matchesSearch =
-        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.phone.includes(searchTerm);
+        (student.name && student.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (student.email && student.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (student.phone && student.phone.includes(searchTerm));
 
       const matchesCourse =
         courseFilter === "All Courses" ||
@@ -198,7 +54,7 @@ function Students() {
 
       const matchesSemester =
         semesterFilter === "All Semesters" ||
-        student.semester === semesterFilter;
+        String(student.semester).includes(semesterFilter.replace("Semester ", ""));
 
       const matchesStatus =
         statusFilter === "All Status" ||
@@ -242,7 +98,7 @@ function Students() {
     }));
   };
 
-  const handleAddStudent = (e) => {
+  const handleAddStudent = async (e) => {
     e.preventDefault();
 
     if (
@@ -254,36 +110,43 @@ function Students() {
       return;
     }
 
-    const newStudent = {
-      id: Date.now(),
-      ...formData,
-    };
-
-    setStudents((prev) => [...prev, newStudent]);
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      course: "BCA",
-      semester: "Semester 1",
-      department: "Computer Applications",
-      status: "Active",
-    });
-
-    setShowModal(false);
+    try {
+      const res = await studentAPI.create(formData);
+      if (res.student) {
+        setStudents((prev) => [res.student, ...prev]);
+      }
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        course: "BCA",
+        semester: "Semester 1",
+        department: "Computer Applications",
+        status: "Active",
+      });
+      setShowModal(false);
+      alert("Student added successfully to the database!");
+    } catch (err) {
+      alert(err.message || "Failed to add student.");
+    }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this student?"
     );
 
     if (!confirmed) return;
 
-    setStudents((prev) =>
-      prev.filter((student) => student.id !== id)
-    );
+    try {
+      await studentAPI.delete(id);
+      setStudents((prev) =>
+        prev.filter((student) => (student._id || student.id) !== id)
+      );
+      alert("Student deleted successfully.");
+    } catch (err) {
+      alert("Failed to delete student: " + err.message);
+    }
   };
 
   const resetFilters = () => {

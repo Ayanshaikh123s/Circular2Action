@@ -443,20 +443,46 @@
 
 .view-important-btn {
   border: none;
-  background: #6b4a72;
   color: #ffffff;
   height: 35px;
   padding: 0 14px;
   border-radius: 8px;
   font-family: inherit;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.view-important-btn:hover {
-  background: #583b60;
+.view-important-btn.btn-event-theme {
+  background: linear-gradient(135deg, #ea580c, #db2777);
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
+}
+
+.view-important-btn.btn-event-theme:hover {
+  background: linear-gradient(135deg, #c2410c, #be185d);
+  transform: scale(1.05);
+}
+
+.view-important-btn.btn-exam-theme {
+  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
+}
+
+.view-important-btn.btn-exam-theme:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  transform: scale(1.05);
+}
+
+.view-important-btn.btn-notice-theme {
+  background: linear-gradient(135deg, #075e54, #128c7e);
+  box-shadow: 0 2px 8px rgba(7, 94, 84, 0.25);
+}
+
+.view-important-btn.btn-notice-theme:hover {
+  background: linear-gradient(135deg, #054c44, #0d7065);
+  transform: scale(1.05);
 }
 
 /* EMPTY */

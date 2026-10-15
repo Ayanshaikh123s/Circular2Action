@@ -1,0 +1,668 @@
+/* ================= CIRCULAR POSTER MODAL ================= */
+
+.poster-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  animation: posterFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes posterFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.poster-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: auto;
+  animation: posterPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes posterPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Floating close icon */
+.poster-close-floating {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.poster-close-floating:hover {
+  background: #ef4444;
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* ================= POSTER SHEET ================= */
+
+.poster-sheet {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  font-family: "Manrope", sans-serif;
+  color: #1e293b;
+}
+
+/* Top ribbon */
+.poster-top-ribbon {
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b, #10b981, #3b82f6);
+}
+
+/* ================= INSTITUTION HEADER ================= */
+
+.poster-institution-header {
+  padding: 22px 28px 18px;
+  background: #ffffff;
+  border-bottom: 2px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.institution-crest {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1e1b4b, #4338ca);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(67, 56, 202, 0.25);
+  flex-shrink: 0;
+}
+
+.crest-inner {
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -1px;
+}
+
+.institution-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.institution-sub {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #6366f1;
+  text-transform: uppercase;
+}
+
+.institution-name {
+  margin: 3px 0 2px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+  line-height: 1.25;
+}
+
+.institution-dept {
+  margin: 0;
+  font-size: 10.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.institution-meta-badge {
+  text-align: right;
+  flex-shrink: 0;
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.meta-ref-label {
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.meta-ref-val {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.meta-date {
+  display: block;
+  font-size: 9.5px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* ================= POSTER HERO BANNER ================= */
+
+.poster-hero {
+  position: relative;
+  padding: 32px 28px 28px;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.poster-watermark {
+  position: absolute;
+  right: 15px;
+  bottom: -20px;
+  font-size: 110px;
+  opacity: 0.15;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Theme gradients for hero */
+.theme-festival .poster-hero {
+  background: linear-gradient(135deg, #4a044e 0%, #831843 45%, #ea580c 100%);
+}
+
+.theme-holiday .poster-hero {
+  background: linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #f59e0b 100%);
+}
+
+.theme-event .poster-hero {
+  background: linear-gradient(135deg, #31104b 0%, #581c87 50%, #2563eb 100%);
+}
+
+.theme-exam .poster-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #b45309 100%);
+}
+
+.theme-finance .poster-hero {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 55%, #ca8a04 100%);
+}
+
+.theme-general .poster-hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 60%, #6366f1 100%);
+}
+
+.poster-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.poster-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(6px);
+}
+
+.theme-pill {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.pill-dot {
+  font-size: 8px;
+  color: #facc15;
+}
+
+.priority-pill {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fee2e2;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.priority-pill.urgent,
+.priority-pill.high {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #f87171;
+}
+
+.audience-pill {
+  background: rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.poster-title {
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  text-transform: capitalize;
+}
+
+.poster-tagline {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+/* ================= POSTER BODY ================= */
+
+.poster-body {
+  padding: 24px 28px 24px;
+  background: #ffffff;
+}
+
+/* Description */
+.poster-description-card {
+  position: relative;
+  background: #f8fafc;
+  border-left: 4px solid #6366f1;
+  border-radius: 12px;
+  padding: 16px 20px 16px 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.theme-festival .poster-description-card {
+  border-left-color: #ea580c;
+  background: #fff7ed;
+}
+
+.theme-holiday .poster-description-card {
+  border-left-color: #0284c7;
+  background: #f0f9ff;
+}
+
+.theme-event .poster-description-card {
+  border-left-color: #7c3aed;
+  background: #faf5ff;
+}
+
+.theme-exam .poster-description-card {
+  border-left-color: #1e3a8a;
+  background: #f1f5f9;
+}
+
+.desc-quote-icon {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  font-size: 32px;
+  color: #cbd5e1;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.desc-text {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #334155;
+  font-weight: 600;
+  white-space: pre-wrap;
+}
+
+/* Highlights Grid */
+.poster-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.highlight-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.highlight-box:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+}
+
+.hl-icon {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.hl-label {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.8px;
+  margin-bottom: 3px;
+}
+
+.hl-val {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.highlight-box.deadline-active {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.highlight-box.deadline-active .hl-val {
+  color: #b91c1c;
+}
+
+/* Action Box */
+.poster-action-box {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #fde047;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 14px rgba(234, 179, 8, 0.12);
+}
+
+.action-box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.action-bolt {
+  font-size: 18px;
+  color: #d97706;
+}
+
+.action-box-header h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 900;
+  color: #92400e;
+  letter-spacing: 0.5px;
+}
+
+.action-box-text {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #78350f;
+  line-height: 1.45;
+}
+
+.action-box-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #92400e;
+  border-top: 1px dashed #fcd34d;
+  padding-top: 8px;
+}
+
+.action-status-badge {
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Authority Footer */
+.poster-authority-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  gap: 16px;
+}
+
+.authority-stamp {
+  flex-shrink: 0;
+}
+
+.stamp-seal {
+  width: 90px;
+  height: 90px;
+  border: 2px dashed #94a3b8;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transform: rotate(-8deg);
+  color: #475569;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 4px;
+}
+
+.stamp-seal strong {
+  font-size: 8.5px;
+  color: #1e293b;
+  margin: 2px 0;
+}
+
+.authority-signature {
+  text-align: right;
+}
+
+.sig-line {
+  font-family: "Brush Script MT", "Caveat", cursive, sans-serif;
+  font-size: 20px;
+  color: #1e3a8a;
+  line-height: 1.2;
+}
+
+.sig-designation {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: #334155;
+  margin-top: 2px;
+}
+
+.sig-campus {
+  display: block;
+  font-size: 9px;
+  color: #64748b;
+}
+
+/* Security Band */
+.poster-security-band {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 6px 14px;
+  text-align: center;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* ================= MODAL ACTIONS ================= */
+
+.poster-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.poster-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-share {
+  background: #22c55e;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.btn-share:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+.btn-print {
+  background: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+.btn-print:hover {
+  background: #4f46e5;
+  transform: translateY(-2px);
+}
+
+.btn-close {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ================= PRINT MEDIA STYLES ================= */
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .poster-modal-backdrop,
+  .poster-modal-backdrop * {
+    visibility: visible;
+  }
+  .poster-modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: transparent;
+    padding: 0;
+    display: block;
+  }
+  .poster-modal-container {
+    max-width: 100%;
+    margin: 0;
+  }
+  .no-print,
+  .poster-close-floating,
+  .poster-modal-actions {
+    display: none !important;
+  }
+  .poster-sheet {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 640px) {
+  .poster-institution-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .institution-meta-badge {
+    text-align: center;
+    width: 100%;
+  }
+
+  .poster-hero {
+    padding: 22px 18px 20px;
+  }
+
+  .poster-title {
+    font-size: 20px;
+  }
+
+  .poster-highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .poster-modal-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .poster-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

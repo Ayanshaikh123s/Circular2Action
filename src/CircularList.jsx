@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { circularAPI } from "./api";
+import CircularPosterModal from "./CircularPosterModal";
+import EditCircularModal from "./EditCircularModal";
 import "./CircularList.css";
 
 function CircularList() {
@@ -7,206 +10,27 @@ function CircularList() {
 
   const categoryFromUrl = searchParams.get("category") || "all";
 
-  const circulars = [
-    {
-      id: 1,
-      title: "Internal Examination Schedule",
-      category: "Examination",
-      audience: "All Students",
-      date: "28 Sep 2026",
-      deadline: "10 Oct 2026",
-      status: "Published",
-    },
-    {
-      id: 2,
-      title: "Semester 5 Project Submission Guidelines",
-      category: "Academic",
-      audience: "Semester 5",
-      date: "26 Sep 2026",
-      deadline: "15 Oct 2026",
-      status: "Published",
-    },
-    {
-      id: 3,
-      title: "Navratri Holiday Notice",
-      category: "General",
-      audience: "All Students",
-      date: "24 Sep 2026",
-      deadline: "—",
-      status: "Published",
-    },
-    {
-      id: 4,
-      title: "Workshop Registration - Data Analytics",
-      category: "Events",
-      audience: "BCA Students",
-      date: "22 Sep 2026",
-      deadline: "05 Oct 2026",
-      status: "Draft",
-    },
-    {
-      id: 5,
-      title: "Library Book Return Notice",
-      category: "Student Services",
-      audience: "All Students",
-      date: "20 Sep 2026",
-      deadline: "30 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 6,
-      title: "Fee Payment Reminder",
-      category: "Finance",
-      audience: "All Students",
-      date: "18 Sep 2026",
-      deadline: "01 Oct 2026",
-      status: "Draft",
-    },
-    {
-      id: 7,
-      title: "BCA Semester 3 Internal Assessment",
-      category: "Academic",
-      audience: "Semester 3",
-      date: "16 Sep 2026",
-      deadline: "25 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 8,
-      title: "Mid Semester Examination Guidelines",
-      category: "Examination",
-      audience: "All Students",
-      date: "15 Sep 2026",
-      deadline: "28 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 9,
-      title: "College Cultural Fest Registration",
-      category: "Events",
-      audience: "All Students",
-      date: "13 Sep 2026",
-      deadline: "30 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 10,
-      title: "Scholarship Application Notice",
-      category: "Finance",
-      audience: "Eligible Students",
-      date: "12 Sep 2026",
-      deadline: "05 Oct 2026",
-      status: "Published",
-    },
-    {
-      id: 11,
-      title: "Student ID Card Renewal",
-      category: "Student Services",
-      audience: "All Students",
-      date: "10 Sep 2026",
-      deadline: "25 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 12,
-      title: "MCA Semester 1 Orientation",
-      category: "Academic",
-      audience: "MCA Students",
-      date: "08 Sep 2026",
-      deadline: "—",
-      status: "Published",
-    },
-    {
-      id: 13,
-      title: "Examination Form Submission",
-      category: "Examination",
-      audience: "All Students",
-      date: "06 Sep 2026",
-      deadline: "20 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 14,
-      title: "Sports Week Participation Notice",
-      category: "Events",
-      audience: "All Students",
-      date: "04 Sep 2026",
-      deadline: "18 Sep 2026",
-      status: "Draft",
-    },
-    {
-      id: 15,
-      title: "Hostel Fee Payment Notice",
-      category: "Finance",
-      audience: "Hostel Students",
-      date: "02 Sep 2026",
-      deadline: "20 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 16,
-      title: "Library Membership Renewal",
-      category: "Student Services",
-      audience: "All Students",
-      date: "30 Aug 2026",
-      deadline: "15 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 17,
-      title: "Semester 1 Academic Calendar",
-      category: "Academic",
-      audience: "Semester 1",
-      date: "28 Aug 2026",
-      deadline: "—",
-      status: "Published",
-    },
-    {
-      id: 18,
-      title: "Practical Examination Schedule",
-      category: "Examination",
-      audience: "BCA Students",
-      date: "26 Aug 2026",
-      deadline: "12 Sep 2026",
-      status: "Published",
-    },
-    {
-      id: 19,
-      title: "Freshers Welcome Event",
-      category: "Events",
-      audience: "Semester 1",
-      date: "24 Aug 2026",
-      deadline: "05 Sep 2026",
-      status: "Draft",
-    },
-    {
-      id: 20,
-      title: "Student Welfare Support Notice",
-      category: "Student Services",
-      audience: "All Students",
-      date: "22 Aug 2026",
-      deadline: "—",
-      status: "Published",
-    },
-    {
-      id: 21,
-      title: "General College Guidelines",
-      category: "General",
-      audience: "All Students",
-      date: "20 Aug 2026",
-      deadline: "—",
-      status: "Published",
-    },
-    {
-      id: 22,
-      title: "Annual Fee Structure Notice",
-      category: "Finance",
-      audience: "All Students",
-      date: "18 Aug 2026",
-      deadline: "30 Sep 2026",
-      status: "Published",
-    },
-  ];
+  const [circulars, setCirculars] = useState([]);
+  const [selectedPosterCircular, setSelectedPosterCircular] = useState(null);
+  const [editingCircular, setEditingCircular] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchCirculars = async () => {
+    try {
+      setLoading(true);
+      const res = await circularAPI.getAll();
+      const list = Array.isArray(res) ? res : (res?.circulars || []);
+      setCirculars(list);
+    } catch (err) {
+      console.error("Error fetching circulars:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCirculars();
+  }, []);
 
   const [searchText, setSearchText] = useState("");
   const [categoryFilter, setCategoryFilter] = useState(
@@ -238,7 +62,7 @@ function CircularList() {
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [searchText, categoryFilter, statusFilter]);
+  }, [circulars, searchText, categoryFilter, statusFilter]);
 
   const totalPages = Math.max(
     1,
@@ -282,22 +106,39 @@ function CircularList() {
   };
 
   const handleView = (circular) => {
-    alert(
-      `Circular Details\n\nTitle: ${circular.title}\nCategory: ${circular.category}\nAudience: ${circular.audience}\nStatus: ${circular.status}`
-    );
+    setSelectedPosterCircular(circular);
   };
 
   const handleEdit = (circular) => {
-    alert(`Edit Circular:\n\n${circular.title}`);
+    setEditingCircular(circular);
   };
 
-  const handleDelete = (circular) => {
+  const handleEditSuccess = (updated) => {
+    fetchCirculars();
+    alert("Circular updated successfully! Changes are now live for all students.");
+  };
+
+  const handleDelete = async (circular) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${circular.title}"?`
     );
 
     if (confirmed) {
-      alert("Delete functionality will be connected to the backend later.");
+      try {
+        const targetId = circular._id || circular.id;
+        await circularAPI.delete(targetId);
+        setCirculars((prev) =>
+          prev.filter(
+            (c) =>
+              String(c._id || c.id) !== String(targetId) &&
+              String(c.id) !== String(targetId)
+          )
+        );
+        fetchCirculars();
+        alert("Circular deleted successfully.");
+      } catch (err) {
+        alert("Failed to delete circular: " + err.message);
+      }
     }
   };
 
@@ -782,7 +623,19 @@ function CircularList() {
         </section>
 
       </main>
-
+      {selectedPosterCircular && (
+        <CircularPosterModal
+          circular={selectedPosterCircular}
+          onClose={() => setSelectedPosterCircular(null)}
+        />
+      )}
+      {editingCircular && (
+        <EditCircularModal
+          circular={editingCircular}
+          onClose={() => setEditingCircular(null)}
+          onSuccess={handleEditSuccess}
+        />
+      )}
     </div>
   );
 }

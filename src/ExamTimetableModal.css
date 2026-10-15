@@ -1,0 +1,577 @@
+/* ==========================================================================
+   Exam Timetable Date-Sheet Modal Styles
+   Authentic University Examination Schedule & Notice Board Sheet
+   ========================================================================== */
+
+.exam-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(10, 15, 29, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+  animation: examFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes examFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.exam-modal-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Floating Close Button */
+.exam-close-floating {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #f1f5f9;
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.exam-close-floating:hover {
+  background: #ef4444;
+  border-color: #f87171;
+  transform: rotate(90deg) scale(1.08);
+}
+
+/* Main Academic Paper Sheet Card */
+.exam-timetable-card {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+  padding: 2.25rem 2.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  border-top: 6px solid #1e40af;
+}
+
+/* 1. Header Masthead */
+.exam-header-masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.exam-crest-box {
+  flex-shrink: 0;
+  width: 58px;
+  height: 58px;
+  background: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.85rem;
+}
+
+.exam-masthead-titles {
+  flex: 1;
+  text-align: center;
+}
+
+.exam-sub-title {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.exam-college-name {
+  margin: 0.15rem 0 0.1rem 0;
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.exam-board-name {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e40af;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.exam-ref-box {
+  flex-shrink: 0;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-ref-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.exam-ref-box strong {
+  font-size: 0.82rem;
+  color: #1e293b;
+  font-family: monospace;
+}
+
+.exam-ref-box small {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* 2. Headline Banner */
+.exam-title-banner {
+  text-align: center;
+  padding: 1.25rem 0 0.75rem 0;
+}
+
+.exam-title-badge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid #bfdbfe;
+  margin-bottom: 0.5rem;
+}
+
+.exam-main-heading {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.exam-session-sub {
+  margin: 0.35rem 0 0 0;
+  font-size: 0.88rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* 3. Key Exam Details Strip */
+.exam-meta-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.6rem;
+  margin: 1.15rem 0;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.meta-tile {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.meta-tile small {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.meta-tile strong {
+  font-size: 0.88rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.meta-tile.exam-date-tile {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.exam-highlight-date {
+  color: #1e40af !important;
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+}
+
+.reporting-alert {
+  color: #b91c1c !important;
+  font-weight: 800 !important;
+}
+
+/* 4. Official Examination Schedule & Details Content Box */
+.exam-content-box {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1.25rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.exam-content-header {
+  background: #1e3a8a;
+  color: #ffffff;
+  padding: 0.75rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.content-header-icon {
+  font-size: 1.25rem;
+}
+
+.exam-content-header h3 {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.exam-content-header small {
+  display: block;
+  font-size: 0.72rem;
+  color: #bfdbfe;
+}
+
+.exam-content-body {
+  padding: 1.25rem 1.35rem;
+  background: #ffffff;
+}
+
+.exam-structured-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.exam-line-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.6rem 0.85rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.exam-line-item:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.line-bullet {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.line-text {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #1e293b;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.exam-plain-desc {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #1e293b;
+  line-height: 1.6;
+  white-space: pre-line;
+  font-weight: 500;
+}
+
+/* 5. Mandatory Action Callout Box */
+.exam-action-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: 10px;
+  padding: 0.9rem 1.15rem;
+  margin: 1.15rem 0;
+}
+
+.action-callout-icon {
+  font-size: 1.45rem;
+  flex-shrink: 0;
+}
+
+.action-callout-content h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #92400e;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.action-callout-content p {
+  margin: 0 0 0.45rem 0;
+  font-size: 0.84rem;
+  color: #78350f;
+  line-height: 1.4;
+}
+
+.action-deadline-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #fde68a;
+}
+
+.action-deadline-badge strong {
+  color: #92400e;
+}
+
+/* 6. Rules & Regulations Box */
+.exam-rules-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.85rem 1.15rem;
+  margin: 1rem 0;
+}
+
+.exam-rules-box h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #334155;
+  letter-spacing: 0.05em;
+}
+
+.exam-rules-box ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.exam-rules-box li {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+/* 7. Authority Sign-Off & Official Seal */
+.exam-footer-signature {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1.5px dashed #cbd5e1;
+}
+
+.exam-official-seal {
+  width: 96px;
+  height: 96px;
+  border: 2px dashed #1e40af;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #1e40af;
+  text-align: center;
+  transform: rotate(-8deg);
+  opacity: 0.85;
+}
+
+.exam-official-seal span {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.exam-official-seal strong {
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0.1rem 0;
+}
+
+.exam-signatory-block {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.sig-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  font-family: Georgia, serif;
+}
+
+.sig-role {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.sig-college {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* 8. Bottom Action Buttons Bar */
+.exam-bottom-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.exam-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-print-sheet {
+  background: #1e40af;
+  color: #ffffff;
+}
+
+.btn-print-sheet:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+.btn-copy-sheet {
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-copy-sheet:hover {
+  background: #e2e8f0;
+}
+
+.btn-close-sheet {
+  flex: 0 0 110px;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-close-sheet:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-exam-sheet,
+  #printable-exam-sheet * {
+    visibility: visible;
+  }
+  #printable-exam-sheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 1rem;
+    box-shadow: none;
+    border: none;
+  }
+  .no-print,
+  .exam-close-floating {
+    display: none !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .exam-timetable-card {
+    padding: 1.25rem 1rem;
+  }
+  .exam-header-masthead {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  .exam-ref-box {
+    text-align: center;
+    width: 100%;
+  }
+  .exam-bottom-bar {
+    flex-direction: column;
+  }
+  .btn-close-sheet {
+    flex: 1;
+  }
+}

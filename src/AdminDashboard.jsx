@@ -1,7 +1,39 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { statsAPI } from "./api";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
+  const [stats, setStats] = useState({
+    totalCirculars: 0,
+    pendingActions: 0,
+    notificationsSent: 0,
+    studentsReached: 0,
+    recentCirculars: [],
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        setLoading(true);
+        const res = await statsAPI.getAdminStats();
+        const s = res?.stats || res || {};
+        setStats({
+          totalCirculars: s.totalCirculars || 0,
+          pendingActions: s.pendingActions || 0,
+          notificationsSent: s.notificationsSent || 0,
+          studentsReached: s.studentsReached || 0,
+          recentCirculars: s.recentCirculars || [],
+        });
+      } catch (err) {
+        console.error("Error loading admin stats:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStats();
+  }, []);
   return (
     <div className="admin-dashboard">
 
@@ -133,10 +165,10 @@ function AdminDashboard() {
               <div className="stat-icon purple">▤</div>
             </div>
 
-            <div className="stat-value">128</div>
+            <div className="stat-value">{stats.totalCirculars}</div>
 
             <div className="stat-change positive">
-              ↑ 12% <span>from last month</span>
+              Live <span>from database</span>
             </div>
           </div>
 
@@ -146,10 +178,10 @@ function AdminDashboard() {
               <div className="stat-icon lavender">✓</div>
             </div>
 
-            <div className="stat-value">24</div>
+            <div className="stat-value">{stats.pendingActions}</div>
 
             <div className="stat-change warning">
-              8 due this week
+              Requires student action
             </div>
           </div>
 
@@ -159,10 +191,10 @@ function AdminDashboard() {
               <div className="stat-icon soft">♢</div>
             </div>
 
-            <div className="stat-value">342</div>
+            <div className="stat-value">{stats.notificationsSent}</div>
 
             <div className="stat-change positive">
-              ↑ 18% <span>this month</span>
+              Delivered <span>to students</span>
             </div>
           </div>
 
@@ -172,10 +204,10 @@ function AdminDashboard() {
               <div className="stat-icon light">○</div>
             </div>
 
-            <div className="stat-value">2,486</div>
+            <div className="stat-value">{stats.studentsReached}</div>
 
             <div className="stat-change positive">
-              ↑ 9% <span>this month</span>
+              Registered <span>students</span>
             </div>
           </div>
 
@@ -207,85 +239,35 @@ function AdminDashboard() {
                 <span>Status</span>
               </div>
 
-              <div className="table-row">
-                <div className="circular-title">
-                  <div className="mini-icon">A</div>
-                  <div>
-                    <strong>Internal Examination Schedule</strong>
-                    <small>Academic circular</small>
+              {stats.recentCirculars && stats.recentCirculars.length > 0 ? (
+                stats.recentCirculars.map((c, idx) => (
+                  <div className="table-row" key={c._id || c.id || idx}>
+                    <div className="circular-title">
+                      <div className="mini-icon">
+                        {c.title ? c.title.charAt(0).toUpperCase() : "C"}
+                      </div>
+                      <div>
+                        <strong>{c.title}</strong>
+                        <small>{c.audience || "All Students"}</small>
+                      </div>
+                    </div>
+
+                    <span className={`category-badge ${(c.category || "general").toLowerCase().replace(/\s+/g, "-")}`}>
+                      {c.category || "General"}
+                    </span>
+
+                    <span className="date-text">{c.date || "Today"}</span>
+
+                    <span className={`status-badge ${(c.status || "published").toLowerCase()}`}>
+                      {c.status || "Published"}
+                    </span>
                   </div>
+                ))
+              ) : (
+                <div style={{ padding: "20px", textAlign: "center", color: "#64748b" }}>
+                  No circulars published yet.
                 </div>
-
-                <span className="category-badge academic">
-                  Academic
-                </span>
-
-                <span className="date-text">28 Sep 2026</span>
-
-                <span className="status-badge published">
-                  Published
-                </span>
-              </div>
-
-              <div className="table-row">
-                <div className="circular-title">
-                  <div className="mini-icon">E</div>
-                  <div>
-                    <strong>Holiday Notice - Gandhi Jayanti</strong>
-                    <small>General notice</small>
-                  </div>
-                </div>
-
-                <span className="category-badge general">
-                  General
-                </span>
-
-                <span className="date-text">26 Sep 2026</span>
-
-                <span className="status-badge published">
-                  Published
-                </span>
-              </div>
-
-              <div className="table-row">
-                <div className="circular-title">
-                  <div className="mini-icon">F</div>
-                  <div>
-                    <strong>Fee Payment Reminder</strong>
-                    <small>Student services</small>
-                  </div>
-                </div>
-
-                <span className="category-badge finance">
-                  Finance
-                </span>
-
-                <span className="date-text">25 Sep 2026</span>
-
-                <span className="status-badge published">
-                  Published
-                </span>
-              </div>
-
-              <div className="table-row">
-                <div className="circular-title">
-                  <div className="mini-icon">I</div>
-                  <div>
-                    <strong>Inter-College Sports Event</strong>
-                    <small>Student activity</small>
-                  </div>
-                </div>
-
-                <span className="category-badge event">
-                  Event
-                </span>
-
-                <span className="date-text">23 Sep 2026</span>
-
-                <span className="status-badge draft">
-                  Draft
-                </span>
-              </div>
+              )}
 
             </div>
           </div>

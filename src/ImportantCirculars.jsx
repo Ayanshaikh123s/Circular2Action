@@ -1,85 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { circularAPI } from "./api";
+import CircularPosterModal from "./CircularPosterModal";
+import { isEventCircular, isExamCircular } from "./utils/circularClassifier";
 import "./ImportantCirculars.css";
-
-const importantCirculars = [
-  {
-    id: 1,
-    title: "Internal Examination Schedule",
-    category: "Examination",
-    audience: "All Students",
-    issuedDate: "28 Sep 2026",
-    deadline: "10 Oct 2026",
-    priority: "High",
-    action: "Required",
-    description:
-      "Students are required to check the examination schedule and complete the examination form before the deadline.",
-  },
-  {
-    id: 2,
-    title: "Semester 5 Project Submission Guidelines",
-    category: "Academic",
-    audience: "Semester 5",
-    issuedDate: "26 Sep 2026",
-    deadline: "15 Oct 2026",
-    priority: "High",
-    action: "Required",
-    description:
-      "Semester 5 students must submit their project report according to the given submission guidelines.",
-  },
-  {
-    id: 3,
-    title: "Workshop Registration - Data Analytics",
-    category: "Events",
-    audience: "BCA Students",
-    issuedDate: "22 Sep 2026",
-    deadline: "05 Oct 2026",
-    priority: "Medium",
-    action: "Required",
-    description:
-      "Students interested in the Data Analytics workshop must complete their registration before the deadline.",
-  },
-  {
-    id: 4,
-    title: "Library Book Return Notice",
-    category: "Student Services",
-    audience: "All Students",
-    issuedDate: "20 Sep 2026",
-    deadline: "30 Sep 2026",
-    priority: "High",
-    action: "Required",
-    description:
-      "Students with issued library books are requested to return them before the mentioned deadline.",
-  },
-  {
-    id: 5,
-    title: "Fee Payment Reminder",
-    category: "Finance",
-    audience: "All Students",
-    issuedDate: "18 Sep 2026",
-    deadline: "01 Oct 2026",
-    priority: "High",
-    action: "Required",
-    description:
-      "Students are requested to complete their pending fee payment before the payment deadline.",
-  },
-  {
-    id: 6,
-    title: "College Cultural Fest Registration",
-    category: "Events",
-    audience: "All Students",
-    issuedDate: "13 Sep 2026",
-    deadline: "30 Sep 2026",
-    priority: "Medium",
-    action: "Required",
-    description:
-      "Students interested in participating in the cultural fest can complete their registration before the deadline.",
-  },
-];
 
 function ImportantCirculars() {
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("All");
+  const [importantCirculars, setImportantCirculars] = useState([]);
+  const [selectedPosterCircular, setSelectedPosterCircular] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const storedUser = JSON.parse(
     localStorage.getItem("circular2actionUser") || "null"
@@ -88,21 +19,42 @@ function ImportantCirculars() {
   const studentName = storedUser?.name || "Student";
   const semester = storedUser?.semester || "";
 
+  useEffect(() => {
+    async function loadImportantCirculars() {
+      try {
+        const data = await circularAPI.getAll();
+        const list = Array.isArray(data) ? data : (data?.circulars || []);
+        // Filter for important or action required circulars
+        const filtered = list.filter(
+          (c) => Boolean(c.actionRequired) || c.priority === "High" || c.priority === "Urgent" || c.priority === "Medium"
+        );
+        setImportantCirculars(filtered);
+      } catch (err) {
+        console.error("Failed to load important circulars:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadImportantCirculars();
+  }, []);
+
   const filteredCirculars = importantCirculars.filter((circular) => {
+    const title = circular.title || "";
+    const category = circular.category || "";
+    const priority = circular.priority || "Normal";
+
     const matchesSearch =
-      circular.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      circular.category.toLowerCase().includes(searchTerm.toLowerCase());
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesPriority =
-      priorityFilter === "All" || circular.priority === priorityFilter;
+      priorityFilter === "All" || priority === priorityFilter;
 
     return matchesSearch && matchesPriority;
   });
 
   const handleView = (circular) => {
-    alert(
-      `Title: ${circular.title}\n\nCategory: ${circular.category}\nPriority: ${circular.priority}\nDeadline: ${circular.deadline}\n\n${circular.description}`
-    );
+    setSelectedPosterCircular(circular);
   };
 
   return (
@@ -293,7 +245,7 @@ function ImportantCirculars() {
           <div className="important-list">
             {filteredCirculars.length > 0 ? (
               filteredCirculars.map((circular) => (
-                <div className="important-item" key={circular.id}>
+                <div className="important-item" key={circular._id || circular.id}>
                   <div className="important-item-left">
                     <div className="circular-symbol">!</div>
 
@@ -302,23 +254,23 @@ function ImportantCirculars() {
                         <h3>{circular.title}</h3>
 
                         <span
-                          className={`priority-badge ${circular.priority.toLowerCase()}`}
+                          className={`priority-badge ${(circular.priority || "Normal").toLowerCase()}`}
                         >
-                          {circular.priority}
+                          {circular.priority || "Normal"}
                         </span>
                       </div>
 
                       <div className="important-meta">
                         <span>{circular.category}</span>
                         <span>•</span>
-                        <span>{circular.audience}</span>
+                        <span>{circular.targetAudience || circular.audience || "All Students"}</span>
                         <span>•</span>
-                        <span>Issued {circular.issuedDate}</span>
+                        <span>Issued {circular.date || circular.issuedDate || "—"}</span>
                       </div>
 
                       <div className="important-deadline">
                         <span>Deadline</span>
-                        <strong>{circular.deadline}</strong>
+                        <strong>{circular.deadline || "—"}</strong>
                       </div>
                     </div>
                   </div>
@@ -329,10 +281,27 @@ function ImportantCirculars() {
                     </span>
 
                     <button
-                      className="view-important-btn"
+                      className={`view-important-btn ${
+                        isEventCircular(circular)
+                          ? "btn-event-theme"
+                          : isExamCircular(circular)
+                          ? "btn-exam-theme"
+                          : "btn-notice-theme"
+                      }`}
                       onClick={() => handleView(circular)}
+                      title={
+                        isEventCircular(circular)
+                          ? "View Official Event Poster"
+                          : isExamCircular(circular)
+                          ? "View Examination Timetable Date-Sheet"
+                          : "View Official Faculty Notice"
+                      }
                     >
-                      View Circular
+                      {isEventCircular(circular)
+                        ? "🎨 View Poster"
+                        : isExamCircular(circular)
+                        ? "📅 View Timetable"
+                        : "💬 View Notice"}
                     </button>
                   </div>
                 </div>
@@ -349,6 +318,12 @@ function ImportantCirculars() {
           </div>
         </section>
       </main>
+      {selectedPosterCircular && (
+        <CircularPosterModal
+          circular={selectedPosterCircular}
+          onClose={() => setSelectedPosterCircular(null)}
+        />
+      )}
     </div>
   );
 }

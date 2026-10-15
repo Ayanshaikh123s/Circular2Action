@@ -1,64 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { actionAPI } from "./api";
+import ActionNotificationModal from "./ActionNotificationModal";
 import "./PendingActions.css";
 
-const pendingActionData = [
-  {
-    id: 1,
-    title: "Submit Examination Form",
-    category: "Examination",
-    assignedDate: "28 Sep 2026",
-    deadline: "10 Oct 2026",
-    priority: "High",
-    description:
-      "Complete and submit the semester examination form before the deadline.",
-  },
-  {
-    id: 2,
-    title: "Register for Data Analytics Workshop",
-    category: "Events",
-    assignedDate: "22 Sep 2026",
-    deadline: "05 Oct 2026",
-    priority: "Medium",
-    description:
-      "Complete registration for the Data Analytics workshop before registration closes.",
-  },
-  {
-    id: 3,
-    title: "Return Library Books",
-    category: "Student Services",
-    assignedDate: "20 Sep 2026",
-    deadline: "30 Sep 2026",
-    priority: "High",
-    description:
-      "Return all issued library books before the specified deadline.",
-  },
-  {
-    id: 4,
-    title: "Complete Fee Payment",
-    category: "Finance",
-    assignedDate: "18 Sep 2026",
-    deadline: "01 Oct 2026",
-    priority: "High",
-    description:
-      "Complete the pending college fee payment before the payment deadline.",
-  },
-  {
-    id: 5,
-    title: "Submit Project Report",
-    category: "Academic",
-    assignedDate: "26 Sep 2026",
-    deadline: "15 Oct 2026",
-    priority: "High",
-    description:
-      "Prepare and submit the Semester 5 project report according to the given guidelines.",
-  },
-];
-
 function PendingActions() {
+  const [pendingActions, setPendingActions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [selectedAction, setSelectedAction] = useState(null);
 
   const storedUser = JSON.parse(
     localStorage.getItem("circular2actionUser") || "null"
@@ -67,24 +19,59 @@ function PendingActions() {
   const studentName = storedUser?.name || "Student";
   const semester = storedUser?.semester || "";
 
-  const filteredActions = pendingActionData.filter((action) => {
+  const loadPendingActions = async () => {
+    try {
+      const data = await actionAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.actions || []);
+      const pending = list.filter((item) => item.status !== "Completed");
+      setPendingActions(pending);
+    } catch (err) {
+      console.error("Failed to load pending actions:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadPendingActions();
+  }, []);
+
+  const filteredActions = pendingActions.filter((action) => {
+    const title = action.title || "";
+    const category = action.category || "";
+    const priority = action.priority || "Normal";
+
     const matchesSearch =
-      action.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      action.category.toLowerCase().includes(searchTerm.toLowerCase());
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesPriority =
-      priorityFilter === "All" || action.priority === priorityFilter;
+      priorityFilter === "All" || priority === priorityFilter;
 
     const matchesCategory =
-      categoryFilter === "All" || action.category === categoryFilter;
+      categoryFilter === "All" || category === categoryFilter;
 
     return matchesSearch && matchesPriority && matchesCategory;
   });
 
   const handleView = (action) => {
-    alert(
-      `Action: ${action.title}\n\nCategory: ${action.category}\nPriority: ${action.priority}\nAssigned: ${action.assignedDate}\nDeadline: ${action.deadline}\nStatus: Pending\n\n${action.description}`
-    );
+    setSelectedAction(action);
+  };
+
+  const handleStatusChange = (updatedAction) => {
+    if (updatedAction.status === "Completed") {
+      setPendingActions((prev) =>
+        prev.filter((a) => (a._id || a.id) !== (updatedAction._id || updatedAction.id))
+      );
+    } else {
+      setPendingActions((prev) =>
+        prev.map((a) =>
+          (a._id || a.id) === (updatedAction._id || updatedAction.id)
+            ? { ...a, status: updatedAction.status }
+            : a
+        )
+      );
+    }
   };
 
   return (
@@ -209,7 +196,7 @@ function PendingActions() {
           <div className="pending-summary-card">
             <div className="pending-summary-icon">◌</div>
             <div>
-              <strong>{pendingActionData.length}</strong>
+              <strong>{pendingActions.length}</strong>
               <p>Total Pending</p>
             </div>
           </div>
@@ -221,8 +208,8 @@ function PendingActions() {
             <div>
               <strong>
                 {
-                  pendingActionData.filter(
-                    (item) => item.priority === "High"
+                  pendingActions.filter(
+                    (item) => item.priority === "High" || item.priority === "Urgent"
                   ).length
                 }
               </strong>
@@ -235,7 +222,7 @@ function PendingActions() {
               !
             </div>
             <div>
-              <strong>3</strong>
+              <strong>{pendingActions.length}</strong>
               <p>Due Soon</p>
             </div>
           </div>
@@ -291,7 +278,7 @@ function PendingActions() {
           <div className="pending-list">
             {filteredActions.length > 0 ? (
               filteredActions.map((action) => (
-                <div className="pending-item" key={action.id}>
+                <div className="pending-item" key={action._id || action.id}>
                   <div className="pending-item-left">
                     <div className="pending-action-icon">!</div>
 
@@ -300,28 +287,28 @@ function PendingActions() {
                         <h3>{action.title}</h3>
 
                         <span
-                          className={`pending-priority ${action.priority.toLowerCase()}`}
+                          className={`pending-priority ${(action.priority || "Normal").toLowerCase()}`}
                         >
-                          {action.priority}
+                          {action.priority || "Normal"}
                         </span>
                       </div>
 
                       <div className="pending-meta">
-                        <span>{action.category}</span>
+                        <span>{action.category || "General"}</span>
                         <span>•</span>
-                        <span>Assigned {action.assignedDate}</span>
+                        <span>Assigned {action.assignedDate || action.date || "Recent"}</span>
                       </div>
 
                       <div className="pending-deadline">
                         <span>Deadline</span>
-                        <strong>{action.deadline}</strong>
+                        <strong>{action.deadline || "—"}</strong>
                       </div>
                     </div>
                   </div>
 
                   <div className="pending-item-right">
                     <span className="pending-status">
-                      Pending
+                      {action.status || "Pending"}
                     </span>
 
                     <button
@@ -345,6 +332,14 @@ function PendingActions() {
           </div>
         </section>
       </main>
+
+      {selectedAction && (
+        <ActionNotificationModal
+          action={selectedAction}
+          onClose={() => setSelectedAction(null)}
+          onStatusChange={handleStatusChange}
+        />
+      )}
     </div>
   );
 }

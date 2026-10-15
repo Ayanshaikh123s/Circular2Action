@@ -1,81 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { notificationAPI } from "./api";
+import CircularPosterModal from "./CircularPosterModal";
 import "./StudentNotifications.css";
-
-const notificationData = [
-  {
-    id: 1,
-    title: "New examination schedule published",
-    category: "Examination",
-    date: "28 Sep 2026",
-    time: "2 hours ago",
-    type: "Circular",
-    unread: true,
-    description:
-      "The internal examination schedule has been published. Please check the examination dates and complete the required examination form before the deadline.",
-  },
-  {
-    id: 2,
-    title: "Project submission deadline updated",
-    category: "Academic",
-    date: "27 Sep 2026",
-    time: "Yesterday",
-    type: "Action",
-    unread: true,
-    description:
-      "The Semester 5 project submission deadline has been updated. Please submit your project report before the new deadline.",
-  },
-  {
-    id: 3,
-    title: "Workshop registration is now open",
-    category: "Events",
-    date: "26 Sep 2026",
-    time: "2 days ago",
-    type: "Event",
-    unread: true,
-    description:
-      "Registration for the Data Analytics workshop is now open. Complete your registration before the registration deadline.",
-  },
-  {
-    id: 4,
-    title: "Library book return reminder",
-    category: "Student Services",
-    date: "25 Sep 2026",
-    time: "3 days ago",
-    type: "Reminder",
-    unread: false,
-    description:
-      "This is a reminder to return all issued library books before the specified deadline.",
-  },
-  {
-    id: 5,
-    title: "Fee payment reminder",
-    category: "Finance",
-    date: "24 Sep 2026",
-    time: "4 days ago",
-    type: "Reminder",
-    unread: false,
-    description:
-      "Please complete your pending college fee payment before the payment deadline.",
-  },
-  {
-    id: 6,
-    title: "Student ID card renewal notice",
-    category: "Student Services",
-    date: "22 Sep 2026",
-    time: "6 days ago",
-    type: "Circular",
-    unread: false,
-    description:
-      "Students are requested to complete their student ID card renewal process according to college instructions.",
-  },
-];
 
 function StudentNotifications() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-  const [notifications, setNotifications] = useState(notificationData);
+  const [notifications, setNotifications] = useState([]);
+  const [selectedPosterCircular, setSelectedPosterCircular] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const storedUser = JSON.parse(
     localStorage.getItem("circular2actionUser") || "null"
@@ -84,22 +19,37 @@ function StudentNotifications() {
   const studentName = storedUser?.name || "Student";
   const semester = storedUser?.semester || "";
 
+  const loadNotifications = async () => {
+    try {
+      const data = await notificationAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.notifications || []);
+      setNotifications(list);
+    } catch (err) {
+      console.error("Failed to fetch notifications:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadNotifications();
+  }, []);
+
   const unreadCount = notifications.filter(
     (notification) => notification.unread
   ).length;
 
   const filteredNotifications = notifications.filter((notification) => {
+    const title = notification.title || "";
+    const category = notification.category || "";
+
     const matchesSearch =
-      notification.title
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      notification.category
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCategory =
       categoryFilter === "All" ||
-      notification.category === categoryFilter;
+      category === categoryFilter;
 
     const matchesUnread =
       !showUnreadOnly || notification.unread;
@@ -111,21 +61,41 @@ function StudentNotifications() {
     );
   });
 
-  const handleView = (notification) => {
+  const handleView = async (notification) => {
+    const notifId = notification._id || notification.id;
+    try {
+      await notificationAPI.markRead(notifId);
+    } catch (e) {
+      console.error(e);
+    }
+
     setNotifications((currentNotifications) =>
       currentNotifications.map((item) =>
-        item.id === notification.id
+        (item._id || item.id) === notifId
           ? { ...item, unread: false }
           : item
       )
     );
 
-    alert(
-      `Notification: ${notification.title}\n\nCategory: ${notification.category}\nType: ${notification.type}\nDate: ${notification.date}\n\n${notification.description}`
-    );
+    setSelectedPosterCircular({
+      id: notification._id || notification.id,
+      title: notification.title,
+      category: notification.category || "General",
+      description: notification.message || notification.description || notification.title,
+      audience: notification.audience || "All Students",
+      date: notification.date || notification.time || "Recent",
+      priority: notification.priority || "Normal",
+      actionRequired: notification.actionRequired || "",
+    });
   };
 
-  const markAllAsRead = () => {
+  const markAllAsRead = async () => {
+    try {
+      await notificationAPI.markAllRead();
+    } catch (e) {
+      console.error(e);
+    }
+
     setNotifications((currentNotifications) =>
       currentNotifications.map((notification) => ({
         ...notification,
@@ -456,7 +426,7 @@ function StudentNotifications() {
                       ? "unread"
                       : ""
                   }`}
-                  key={notification.id}
+                  key={notification._id || notification.id}
                 >
 
                   <div className="notification-item-left">
@@ -490,19 +460,19 @@ function StudentNotifications() {
                       <div className="notification-meta">
 
                         <span>
-                          {notification.category}
+                          {notification.category || "General"}
                         </span>
 
                         <span>•</span>
 
                         <span>
-                          {notification.type}
+                          {notification.type || "Circular"}
                         </span>
 
                         <span>•</span>
 
                         <span>
-                          {notification.time}
+                          {notification.time || notification.date || "Recent"}
                         </span>
 
                       </div>
@@ -512,7 +482,7 @@ function StudentNotifications() {
                         <span>Date</span>
 
                         <strong>
-                          {notification.date}
+                          {notification.date || "—"}
                         </strong>
 
                       </div>
@@ -573,7 +543,12 @@ function StudentNotifications() {
         </section>
 
       </main>
-
+      {selectedPosterCircular && (
+        <CircularPosterModal
+          circular={selectedPosterCircular}
+          onClose={() => setSelectedPosterCircular(null)}
+        />
+      )}
     </div>
   );
 }

@@ -1,74 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { actionAPI } from "./api";
+import ActionNotificationModal from "./ActionNotificationModal";
 import "./CompletedActions.css";
 
-const completedActionData = [
-  {
-    id: 1,
-    title: "Complete Semester Registration",
-    category: "Academic",
-    completedDate: "08 Aug 2026",
-    deadline: "08 Aug 2026",
-    priority: "Medium",
-    description:
-      "Complete semester registration successfully before the registration deadline.",
-  },
-  {
-    id: 2,
-    title: "Renew Student ID Card",
-    category: "Student Services",
-    completedDate: "25 Sep 2026",
-    deadline: "25 Sep 2026",
-    priority: "Medium",
-    description:
-      "Renew the student identity card according to the college instructions.",
-  },
-  {
-    id: 3,
-    title: "Submit Internal Assessment",
-    category: "Academic",
-    completedDate: "25 Jul 2026",
-    deadline: "25 Jul 2026",
-    priority: "Medium",
-    description:
-      "Submit the internal assessment work before the specified deadline.",
-  },
-  {
-    id: 4,
-    title: "Register for Sports Week",
-    category: "Events",
-    completedDate: "18 Jul 2026",
-    deadline: "18 Jul 2026",
-    priority: "Low",
-    description:
-      "Complete registration for the college Sports Week event.",
-  },
-  {
-    id: 5,
-    title: "Submit Scholarship Documents",
-    category: "Student Services",
-    completedDate: "12 Jul 2026",
-    deadline: "15 Jul 2026",
-    priority: "High",
-    description:
-      "Submit all required scholarship documents to the college office.",
-  },
-  {
-    id: 6,
-    title: "Complete Library Registration",
-    category: "Student Services",
-    completedDate: "05 Jul 2026",
-    deadline: "08 Jul 2026",
-    priority: "Low",
-    description:
-      "Complete the required library registration process.",
-  },
-];
-
 function CompletedActions() {
+  const [completedActions, setCompletedActions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [selectedAction, setSelectedAction] = useState(null);
 
   const storedUser = JSON.parse(
     localStorage.getItem("circular2actionUser") || "null"
@@ -77,26 +19,61 @@ function CompletedActions() {
   const studentName = storedUser?.name || "Student";
   const semester = storedUser?.semester || "";
 
-  const filteredActions = completedActionData.filter((action) => {
+  const loadCompletedActions = async () => {
+    try {
+      const data = await actionAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.actions || []);
+      const completed = list.filter((item) => item.status === "Completed");
+      setCompletedActions(completed);
+    } catch (err) {
+      console.error("Failed to load completed actions:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCompletedActions();
+  }, []);
+
+  const filteredActions = completedActions.filter((action) => {
+    const title = action.title || "";
+    const category = action.category || "";
+    const priority = action.priority || "Normal";
+
     const matchesSearch =
-      action.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      action.category.toLowerCase().includes(searchTerm.toLowerCase());
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesPriority =
       priorityFilter === "All" ||
-      action.priority === priorityFilter;
+      priority === priorityFilter;
 
     const matchesCategory =
       categoryFilter === "All" ||
-      action.category === categoryFilter;
+      category === categoryFilter;
 
     return matchesSearch && matchesPriority && matchesCategory;
   });
 
   const handleView = (action) => {
-    alert(
-      `Action: ${action.title}\n\nCategory: ${action.category}\nPriority: ${action.priority}\nCompleted: ${action.completedDate}\nDeadline: ${action.deadline}\nStatus: Completed\n\n${action.description}`
-    );
+    setSelectedAction(action);
+  };
+
+  const handleStatusChange = (updatedAction) => {
+    if (updatedAction.status !== "Completed") {
+      setCompletedActions((prev) =>
+        prev.filter((a) => (a._id || a.id) !== (updatedAction._id || updatedAction.id))
+      );
+    } else {
+      setCompletedActions((prev) =>
+        prev.map((a) =>
+          (a._id || a.id) === (updatedAction._id || updatedAction.id)
+            ? { ...a, status: updatedAction.status }
+            : a
+        )
+      );
+    }
   };
 
   return (
@@ -272,7 +249,7 @@ function CompletedActions() {
             </div>
 
             <div>
-              <strong>{completedActionData.length}</strong>
+              <strong>{completedActions.length}</strong>
               <p>Total Completed</p>
             </div>
 
@@ -285,7 +262,7 @@ function CompletedActions() {
             </div>
 
             <div>
-              <strong>4</strong>
+              <strong>{completedActions.length}</strong>
               <p>This Month</p>
             </div>
 
@@ -298,7 +275,7 @@ function CompletedActions() {
             </div>
 
             <div>
-              <strong>5</strong>
+              <strong>{completedActions.length}</strong>
               <p>Completed On Time</p>
             </div>
 
@@ -376,7 +353,7 @@ function CompletedActions() {
 
                 <div
                   className="completed-item"
-                  key={action.id}
+                  key={action._id || action.id}
                 >
 
                   <div className="completed-item-left">
@@ -392,21 +369,21 @@ function CompletedActions() {
                         <h3>{action.title}</h3>
 
                         <span
-                          className={`completed-priority ${action.priority.toLowerCase()}`}
+                          className={`completed-priority ${(action.priority || "Normal").toLowerCase()}`}
                         >
-                          {action.priority}
+                          {action.priority || "Normal"}
                         </span>
 
                       </div>
 
                       <div className="completed-meta">
 
-                        <span>{action.category}</span>
+                        <span>{action.category || "General"}</span>
 
                         <span>•</span>
 
                         <span>
-                          Completed {action.completedDate}
+                          Completed {action.completedDate || action.deadline || "Completed"}
                         </span>
 
                       </div>
@@ -416,7 +393,7 @@ function CompletedActions() {
                         <span>Deadline</span>
 
                         <strong>
-                          {action.deadline}
+                          {action.deadline || "—"}
                         </strong>
 
                       </div>
@@ -464,6 +441,14 @@ function CompletedActions() {
         </section>
 
       </main>
+
+      {selectedAction && (
+        <ActionNotificationModal
+          action={selectedAction}
+          onClose={() => setSelectedAction(null)}
+          onStatusChange={handleStatusChange}
+        />
+      )}
 
     </div>
   );

@@ -1,57 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { actionAPI } from "./api";
+import EditActionModal from "./EditActionModal";
 import "./ActionItems.css";
 
 function ActionItems() {
-  const [actionItems, setActionItems] = useState([
-    {
-      id: 1,
-      title: "Submit Examination Form",
-      circular: "Internal Examination Schedule",
-      audience: "All Students",
-      deadline: "10 Oct 2026",
-      priority: "High",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      title: "Submit Project Report",
-      circular: "Semester 5 Project Submission Guidelines",
-      audience: "Semester 5",
-      deadline: "15 Oct 2026",
-      priority: "High",
-      status: "In Progress",
-    },
-    {
-      id: 3,
-      title: "Register for Data Analytics Workshop",
-      circular: "Workshop Registration - Data Analytics",
-      audience: "BCA Students",
-      deadline: "05 Oct 2026",
-      priority: "Normal",
-      status: "Pending",
-    },
-    {
-      id: 4,
-      title: "Return Library Books",
-      circular: "Library Book Return Notice",
-      audience: "All Students",
-      deadline: "30 Sep 2026",
-      priority: "Normal",
-      status: "Completed",
-    },
-    {
-      id: 5,
-      title: "Complete Fee Payment",
-      circular: "Fee Payment Reminder",
-      audience: "All Students",
-      deadline: "01 Oct 2026",
-      priority: "Urgent",
-      status: "Pending",
-    },
-  ]);
-
+  const [actionItems, setActionItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingAction, setEditingAction] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("All");
@@ -64,6 +21,22 @@ function ActionItems() {
     priority: "Normal",
     status: "Pending",
   });
+
+  const loadActions = async () => {
+    try {
+      const data = await actionAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.actions || []);
+      setActionItems(list);
+    } catch (err) {
+      console.error("Failed to load actions:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadActions();
+  }, []);
 
   const totalActions = actionItems.length;
 
@@ -81,24 +54,26 @@ function ActionItems() {
 
   // Filtering
   const filteredActionItems = actionItems.filter((item) => {
+    const status = item.status || "Pending";
+    const priority = item.priority || "Normal";
     const matchesStatus =
-      selectedStatus === "All" || item.status === selectedStatus;
+      selectedStatus === "All" || status === selectedStatus;
 
     const matchesPriority =
       selectedPriority === "All" ||
-      item.priority === selectedPriority;
+      priority === selectedPriority;
 
     const search = searchTerm.toLowerCase();
 
     const matchesSearch =
-      item.title.toLowerCase().includes(search) ||
-      item.circular.toLowerCase().includes(search) ||
-      item.audience.toLowerCase().includes(search);
+      (item.title || "").toLowerCase().includes(search) ||
+      (item.circular || "").toLowerCase().includes(search) ||
+      (item.audience || item.targetAudience || "").toLowerCase().includes(search);
 
     return matchesStatus && matchesPriority && matchesSearch;
   });
 
-  const handleAddAction = (e) => {
+  const handleAddAction = async (e) => {
     e.preventDefault();
 
     if (
@@ -111,40 +86,57 @@ function ActionItems() {
       return;
     }
 
-    const action = {
-      id: Date.now(),
-      title: newAction.title,
-      circular: newAction.circular,
-      audience: newAction.audience,
-      deadline: newAction.deadline,
-      priority: newAction.priority,
-      status: newAction.status,
-    };
+    try {
+      const payload = {
+        title: newAction.title,
+        circular: newAction.circular,
+        audience: newAction.audience,
+        deadline: newAction.deadline,
+        priority: newAction.priority,
+        status: newAction.status,
+      };
 
-    setActionItems((prev) => [...prev, action]);
+      const created = await actionAPI.create(payload);
+      setActionItems((prev) => [created, ...prev]);
 
-    setNewAction({
-      title: "",
-      circular: "",
-      audience: "",
-      deadline: "",
-      priority: "Normal",
-      status: "Pending",
-    });
+      setNewAction({
+        title: "",
+        circular: "",
+        audience: "",
+        deadline: "",
+        priority: "Normal",
+        status: "Pending",
+      });
 
-    setShowModal(false);
+      setShowModal(false);
+    } catch (err) {
+      alert(err.message || "Failed to add action item");
+    }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this action item?"
     );
 
     if (confirmDelete) {
-      setActionItems((prev) =>
-        prev.filter((item) => item.id !== id)
-      );
+      try {
+        await actionAPI.delete(id);
+        setActionItems((prev) =>
+          prev.filter((item) => (item._id || item.id) !== id)
+        );
+      } catch (err) {
+        alert(err.message || "Failed to delete action item");
+      }
     }
+  };
+
+  const handleEditSuccess = (updated) => {
+    setActionItems((prev) =>
+      prev.map((item) =>
+        (item._id || item.id) === (updated._id || updated.id) ? updated : item
+      )
+    );
   };
 
   const handleStatClick = (status) => {
@@ -413,7 +405,7 @@ function ActionItems() {
                 {filteredActionItems.length > 0 ? (
                   filteredActionItems.map((item) => (
 
-                    <tr key={item.id}>
+                    <tr key={item._id || item.id}>
 
                       <td>
                         <div className="action-title">
@@ -426,7 +418,7 @@ function ActionItems() {
                       </td>
 
                       <td>
-                        {item.audience}
+                        {item.targetAudience || item.audience || "All Students"}
                       </td>
 
                       <td>
@@ -435,21 +427,21 @@ function ActionItems() {
 
                       <td>
                         <span
-                          className={`priority-badge ${item.priority
+                          className={`priority-badge ${(item.priority || "Normal")
                             .toLowerCase()
                             .replace(" ", "-")}`}
                         >
-                          {item.priority}
+                          {item.priority || "Normal"}
                         </span>
                       </td>
 
                       <td>
                         <span
-                          className={`status-badge ${item.status
+                          className={`status-badge ${(item.status || "Pending")
                             .toLowerCase()
                             .replace(" ", "-")}`}
                         >
-                          {item.status}
+                          {item.status || "Pending"}
                         </span>
                       </td>
 
@@ -460,6 +452,7 @@ function ActionItems() {
                           <button
                             className="edit-btn"
                             title="Edit"
+                            onClick={() => setEditingAction(item)}
                           >
                             ✎
                           </button>
@@ -468,7 +461,7 @@ function ActionItems() {
                             className="delete-btn"
                             title="Delete"
                             onClick={() =>
-                              handleDelete(item.id)
+                              handleDelete(item._id || item.id)
                             }
                           >
                             ×
@@ -692,7 +685,14 @@ function ActionItems() {
           </div>
 
         </div>
+      )}
 
+      {editingAction && (
+        <EditActionModal
+          action={editingAction}
+          onClose={() => setEditingAction(null)}
+          onSuccess={handleEditSuccess}
+        />
       )}
 
     </div>

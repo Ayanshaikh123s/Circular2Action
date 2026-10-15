@@ -1,101 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { circularAPI } from "./api";
+import CircularPosterModal from "./CircularPosterModal";
+import { isEventCircular, isExamCircular } from "./utils/circularClassifier";
 import "./CircularHistory.css";
-
-const circularHistory = [
-  {
-    id: 1,
-    title: "Practical Examination Schedule",
-    category: "Examination",
-    audience: "BCA Students",
-    issuedDate: "26 Aug 2026",
-    deadline: "12 Sep 2026",
-    status: "Completed",
-    description:
-      "The practical examination schedule for BCA students was published with subject-wise dates and timings.",
-  },
-  {
-    id: 2,
-    title: "Student ID Card Renewal",
-    category: "Student Services",
-    audience: "All Students",
-    issuedDate: "10 Sep 2026",
-    deadline: "25 Sep 2026",
-    status: "Closed",
-    description:
-      "Students were requested to complete the renewal process for their college identity cards.",
-  },
-  {
-    id: 3,
-    title: "Orientation Programme Notice",
-    category: "General",
-    audience: "Semester 5 Students",
-    issuedDate: "05 Aug 2026",
-    deadline: "20 Aug 2026",
-    status: "Closed",
-    description:
-      "An orientation programme was conducted for students to provide important academic information.",
-  },
-  {
-    id: 4,
-    title: "Independence Day Celebration",
-    category: "Events",
-    audience: "All Students",
-    issuedDate: "08 Aug 2026",
-    deadline: "15 Aug 2026",
-    status: "Completed",
-    description:
-      "Students were invited to participate in the college Independence Day celebration.",
-  },
-  {
-    id: 5,
-    title: "Semester Registration Notice",
-    category: "Academic",
-    audience: "All Students",
-    issuedDate: "28 Jul 2026",
-    deadline: "08 Aug 2026",
-    status: "Closed",
-    description:
-      "Students were required to complete their semester registration within the given period.",
-  },
-  {
-    id: 6,
-    title: "Library Membership Renewal",
-    category: "Student Services",
-    audience: "All Students",
-    issuedDate: "22 Jul 2026",
-    deadline: "31 Jul 2026",
-    status: "Completed",
-    description:
-      "Students were informed about the annual library membership renewal process.",
-  },
-  {
-    id: 7,
-    title: "Internal Assessment Submission",
-    category: "Academic",
-    audience: "BCA Students",
-    issuedDate: "15 Jul 2026",
-    deadline: "25 Jul 2026",
-    status: "Closed",
-    description:
-      "Students were required to submit their internal assessment work before the deadline.",
-  },
-  {
-    id: 8,
-    title: "Sports Week Registration",
-    category: "Events",
-    audience: "All Students",
-    issuedDate: "10 Jul 2026",
-    deadline: "18 Jul 2026",
-    status: "Completed",
-    description:
-      "Students could register for different sports activities conducted during the college sports week.",
-  },
-];
 
 function CircularHistory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [circularHistory, setCircularHistory] = useState([]);
+  const [selectedPosterCircular, setSelectedPosterCircular] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const storedUser = JSON.parse(
     localStorage.getItem("circular2actionUser") || "null"
@@ -104,21 +19,37 @@ function CircularHistory() {
   const studentName = storedUser?.name || "Student";
   const semester = storedUser?.semester || "";
 
+  useEffect(() => {
+    async function loadHistory() {
+      try {
+        const data = await circularAPI.getAll();
+        const list = Array.isArray(data) ? data : (data?.circulars || []);
+        setCircularHistory(list);
+      } catch (err) {
+        console.error("Failed to load circular history:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadHistory();
+  }, []);
+
   const filteredCirculars = circularHistory.filter((circular) => {
+    const title = circular.title || "";
+    const category = circular.category || "";
+
     const matchesSearch =
-      circular.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      circular.category.toLowerCase().includes(searchTerm.toLowerCase());
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCategory =
-      categoryFilter === "All" || circular.category === categoryFilter;
+      categoryFilter === "All" || category === categoryFilter;
 
     return matchesSearch && matchesCategory;
   });
 
   const handleView = (circular) => {
-    alert(
-      `Title: ${circular.title}\n\nCategory: ${circular.category}\nAudience: ${circular.audience}\nIssued: ${circular.issuedDate}\nDeadline: ${circular.deadline}\nStatus: ${circular.status}\n\n${circular.description}`
-    );
+    setSelectedPosterCircular(circular);
   };
 
   return (
@@ -320,7 +251,7 @@ function CircularHistory() {
           <div className="history-list">
             {filteredCirculars.length > 0 ? (
               filteredCirculars.map((circular) => (
-                <div className="history-item" key={circular.id}>
+                <div className="history-item" key={circular._id || circular.id}>
                   <div className="history-item-left">
                     <div className="history-document-icon">▤</div>
 
@@ -329,37 +260,54 @@ function CircularHistory() {
                         <h3>{circular.title}</h3>
 
                         <span
-                          className={`history-status ${circular.status
+                          className={`history-status ${(circular.status || "Published")
                             .toLowerCase()
                             .replace(" ", "-")}`}
                         >
-                          {circular.status}
+                          {circular.status || "Published"}
                         </span>
                       </div>
 
                       <div className="history-meta">
-                        <span>{circular.category}</span>
+                        <span>{circular.category || "General"}</span>
                         <span>•</span>
-                        <span>{circular.audience}</span>
+                        <span>{circular.targetAudience || circular.audience || "All Students"}</span>
                       </div>
 
                       <div className="history-dates">
                         <span>
-                          Issued: <strong>{circular.issuedDate}</strong>
+                          Issued: <strong>{circular.date || circular.issuedDate || "—"}</strong>
                         </span>
 
                         <span>
-                          Deadline: <strong>{circular.deadline}</strong>
+                          Deadline: <strong>{circular.deadline || "—"}</strong>
                         </span>
                       </div>
                     </div>
                   </div>
 
                   <button
-                    className="history-view-btn"
+                    className={`history-view-btn ${
+                      isEventCircular(circular)
+                        ? "btn-event-pill"
+                        : isExamCircular(circular)
+                        ? "btn-exam-pill"
+                        : "btn-notice-pill"
+                    }`}
                     onClick={() => handleView(circular)}
+                    title={
+                      isEventCircular(circular)
+                        ? "View Event Poster Flyer"
+                        : isExamCircular(circular)
+                        ? "View Examination Timetable Date-Sheet"
+                        : "View Official Faculty Notice"
+                    }
                   >
-                    View Circular
+                    {isEventCircular(circular)
+                      ? "🎨 Poster"
+                      : isExamCircular(circular)
+                      ? "📅 Timetable"
+                      : "💬 Notice"}
                   </button>
                 </div>
               ))
@@ -375,6 +323,12 @@ function CircularHistory() {
           </div>
         </section>
       </main>
+      {selectedPosterCircular && (
+        <CircularPosterModal
+          circular={selectedPosterCircular}
+          onClose={() => setSelectedPosterCircular(null)}
+        />
+      )}
     </div>
   );
 }

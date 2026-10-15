@@ -1,61 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { notificationAPI } from "./api";
 import "./Notifications.css";
 
 function Notifications() {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "Examination Form Reminder",
-      message: "Students are reminded to submit their examination form before the deadline.",
-      circular: "Internal Examination Schedule",
-      audience: "All Students",
-      channel: "In-App",
-      sentDate: "28 Sep 2026",
-      status: "Delivered",
-    },
-    {
-      id: 2,
-      title: "Project Submission Reminder",
-      message: "Semester 5 students must submit their project report by 15 October.",
-      circular: "Semester 5 Project Submission Guidelines",
-      audience: "Semester 5",
-      channel: "Email",
-      sentDate: "27 Sep 2026",
-      status: "Delivered",
-    },
-    {
-      id: 3,
-      title: "Data Analytics Workshop",
-      message: "Registration is open for the upcoming Data Analytics workshop.",
-      circular: "Workshop Registration - Data Analytics",
-      audience: "BCA Students",
-      channel: "In-App",
-      sentDate: "26 Sep 2026",
-      status: "Read",
-    },
-    {
-      id: 4,
-      title: "Library Book Return",
-      message: "Students are requested to return borrowed library books before the due date.",
-      circular: "Library Book Return Notice",
-      audience: "All Students",
-      channel: "In-App",
-      sentDate: "25 Sep 2026",
-      status: "Delivered",
-    },
-    {
-      id: 5,
-      title: "Fee Payment Reminder",
-      message: "Please complete the pending fee payment before the deadline.",
-      circular: "Fee Payment Reminder",
-      audience: "All Students",
-      channel: "Email",
-      sentDate: "24 Sep 2026",
-      status: "Pending",
-    },
-  ]);
-
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedChannel, setSelectedChannel] = useState("All");
@@ -69,6 +19,22 @@ function Notifications() {
     channel: "In-App",
     status: "Pending",
   });
+
+  const loadNotifications = async () => {
+    try {
+      const data = await notificationAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.notifications || []);
+      setNotifications(list);
+    } catch (err) {
+      console.error("Failed to load notifications:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadNotifications();
+  }, []);
 
   const totalNotifications = notifications.length;
 
@@ -85,21 +51,24 @@ function Notifications() {
   ).length;
 
   const filteredNotifications = notifications.filter((item) => {
+    const status = item.status || "Delivered";
+    const channel = item.channel || "In-App";
+
     const matchesStatus =
       selectedStatus === "All" ||
-      item.status === selectedStatus;
+      status === selectedStatus;
 
     const matchesChannel =
       selectedChannel === "All" ||
-      item.channel === selectedChannel;
+      channel === selectedChannel;
 
     const search = searchTerm.toLowerCase();
 
     const matchesSearch =
-      item.title.toLowerCase().includes(search) ||
-      item.message.toLowerCase().includes(search) ||
-      item.circular.toLowerCase().includes(search) ||
-      item.audience.toLowerCase().includes(search);
+      (item.title || "").toLowerCase().includes(search) ||
+      (item.message || "").toLowerCase().includes(search) ||
+      (item.circular || "").toLowerCase().includes(search) ||
+      (item.audience || item.targetAudience || "").toLowerCase().includes(search);
 
     return matchesStatus && matchesChannel && matchesSearch;
   });
@@ -108,7 +77,7 @@ function Notifications() {
     setSelectedStatus(status);
   };
 
-  const handleAddNotification = (e) => {
+  const handleAddNotification = async (e) => {
     e.preventDefault();
 
     if (
@@ -121,40 +90,49 @@ function Notifications() {
       return;
     }
 
-    const notification = {
-      id: Date.now(),
-      title: newNotification.title,
-      message: newNotification.message,
-      circular: newNotification.circular,
-      audience: newNotification.audience,
-      channel: newNotification.channel,
-      sentDate: "28 Sep 2026",
-      status: newNotification.status,
-    };
+    try {
+      const payload = {
+        title: newNotification.title,
+        message: newNotification.message,
+        circular: newNotification.circular,
+        audience: newNotification.audience,
+        channel: newNotification.channel,
+        sentDate: new Date().toLocaleDateString("en-GB", { day: '2-digit', month: 'short', year: 'numeric' }),
+        status: newNotification.status,
+      };
 
-    setNotifications((prev) => [notification, ...prev]);
+      const created = await notificationAPI.create(payload);
+      setNotifications((prev) => [created, ...prev]);
 
-    setNewNotification({
-      title: "",
-      message: "",
-      circular: "",
-      audience: "",
-      channel: "In-App",
-      status: "Pending",
-    });
+      setNewNotification({
+        title: "",
+        message: "",
+        circular: "",
+        audience: "",
+        channel: "In-App",
+        status: "Pending",
+      });
 
-    setShowModal(false);
+      setShowModal(false);
+    } catch (err) {
+      alert(err.message || "Failed to create notification");
+    }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this notification?"
     );
 
     if (confirmDelete) {
-      setNotifications((prev) =>
-        prev.filter((item) => item.id !== id)
-      );
+      try {
+        await notificationAPI.delete(id);
+        setNotifications((prev) =>
+          prev.filter((item) => (item._id || item.id) !== id)
+        );
+      } catch (err) {
+        alert(err.message || "Failed to delete notification");
+      }
     }
   };
 
@@ -421,7 +399,7 @@ function Notifications() {
                 {filteredNotifications.length > 0 ? (
                   filteredNotifications.map((item) => (
 
-                    <tr key={item.id}>
+                    <tr key={item._id || item.id}>
 
                       <td>
                         <div className="notification-title">
@@ -438,28 +416,28 @@ function Notifications() {
                       </td>
 
                       <td>
-                        {item.audience}
+                        {item.targetAudience || item.audience || "All Students"}
                       </td>
 
                       <td>
                         <span
-                          className={`channel-badge ${item.channel
+                          className={`channel-badge ${(item.channel || "In-App")
                             .toLowerCase()
                             .replace("-", "-")}`}
                         >
-                          {item.channel}
+                          {item.channel || "In-App"}
                         </span>
                       </td>
 
                       <td>
-                        {item.sentDate}
+                        {item.sentDate || item.date || "Recent"}
                       </td>
 
                       <td>
                         <span
-                          className={`status-badge ${item.status.toLowerCase()}`}
+                          className={`status-badge ${(item.status || "Delivered").toLowerCase()}`}
                         >
-                          {item.status}
+                          {item.status || "Delivered"}
                         </span>
                       </td>
 
@@ -478,7 +456,7 @@ function Notifications() {
                             className="delete-btn"
                             title="Delete"
                             onClick={() =>
-                              handleDelete(item.id)
+                              handleDelete(item._id || item.id)
                             }
                           >
                             ×

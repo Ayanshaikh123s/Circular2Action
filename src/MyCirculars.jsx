@@ -1,153 +1,53 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { circularAPI } from "./api";
+import CircularPosterModal from "./CircularPosterModal";
+import { isEventCircular, isExamCircular } from "./utils/circularClassifier";
 import "./MyCirculars.css";
 
 function MyCirculars() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
+  const [circulars, setCirculars] = useState([]);
+  const [selectedPosterCircular, setSelectedPosterCircular] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const circulars = [
-    {
-      id: 1,
-      title: "Internal Examination Schedule",
-      category: "Examination",
-      audience: "All Students",
-      date: "28 Sep 2026",
-      deadline: "10 Oct 2026",
-      status: "Published",
-      actionRequired: true,
-      description:
-        "The internal examination schedule for all semesters has been published.",
-    },
-    {
-      id: 2,
-      title: "Semester 5 Project Submission Guidelines",
-      category: "Academic",
-      audience: "Semester 5",
-      date: "26 Sep 2026",
-      deadline: "15 Oct 2026",
-      status: "Published",
-      actionRequired: true,
-      description:
-        "Students are required to follow the project submission guidelines and submit their reports before the deadline.",
-    },
-    {
-      id: 3,
-      title: "Navratri Holiday Notice",
-      category: "General",
-      audience: "All Students",
-      date: "24 Sep 2026",
-      deadline: "—",
-      status: "Published",
-      actionRequired: false,
-      description:
-        "The college will remain closed during the announced Navratri holiday period.",
-    },
-    {
-      id: 4,
-      title: "Workshop Registration - Data Analytics",
-      category: "Events",
-      audience: "BCA Students",
-      date: "22 Sep 2026",
-      deadline: "05 Oct 2026",
-      status: "Published",
-      actionRequired: true,
-      description:
-        "Students can register for the upcoming Data Analytics workshop.",
-    },
-    {
-      id: 5,
-      title: "Library Book Return Notice",
-      category: "Student Services",
-      audience: "All Students",
-      date: "20 Sep 2026",
-      deadline: "30 Sep 2026",
-      status: "Published",
-      actionRequired: true,
-      description:
-        "Students are requested to return borrowed library books before the due date.",
-    },
-    {
-      id: 6,
-      title: "Fee Payment Reminder",
-      category: "Finance",
-      audience: "All Students",
-      date: "18 Sep 2026",
-      deadline: "01 Oct 2026",
-      status: "Published",
-      actionRequired: true,
-      description:
-        "Students are reminded to complete their applicable fee payments before the deadline.",
-    },
-    {
-      id: 7,
-      title: "College Cultural Fest Registration",
-      category: "Events",
-      audience: "All Students",
-      date: "13 Sep 2026",
-      deadline: "30 Sep 2026",
-      status: "Published",
-      actionRequired: true,
-      description:
-        "Registration is open for students interested in participating in the college cultural fest.",
-    },
-    {
-      id: 8,
-      title: "Student ID Card Renewal",
-      category: "Student Services",
-      audience: "All Students",
-      date: "10 Sep 2026",
-      deadline: "25 Sep 2026",
-      status: "Published",
-      actionRequired: false,
-      description:
-        "Students whose ID cards require renewal can submit their renewal request.",
-    },
-    {
-      id: 9,
-      title: "Practical Examination Schedule",
-      category: "Examination",
-      audience: "BCA Students",
-      date: "26 Aug 2026",
-      deadline: "12 Sep 2026",
-      status: "Published",
-      actionRequired: false,
-      description:
-        "The practical examination schedule for BCA students has been announced.",
-    },
-    {
-      id: 10,
-      title: "Student Welfare Support Notice",
-      category: "Student Services",
-      audience: "All Students",
-      date: "22 Aug 2026",
-      deadline: "—",
-      status: "Published",
-      actionRequired: false,
-      description:
-        "Information about available student welfare and support services.",
-    },
-  ];
+  useEffect(() => {
+    async function loadCirculars() {
+      try {
+        const data = await circularAPI.getAll();
+        const list = Array.isArray(data) ? data : (data?.circulars || []);
+        setCirculars(list);
+      } catch (err) {
+        console.error("Failed to fetch circulars:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCirculars();
+  }, []);
 
   const filteredCirculars = circulars.filter((circular) => {
+    const title = circular.title || "";
+    const cat = circular.category || "";
+    const stat = circular.status || "Published";
+
     const matchesSearch =
-      circular.title.toLowerCase().includes(search.toLowerCase()) ||
-      circular.category.toLowerCase().includes(search.toLowerCase());
+      title.toLowerCase().includes(search.toLowerCase()) ||
+      cat.toLowerCase().includes(search.toLowerCase());
 
     const matchesCategory =
-      category === "All" || circular.category === category;
+      category === "All" || cat === category;
 
     const matchesStatus =
-      status === "All" || circular.status === status;
+      status === "All" || stat === status;
 
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
   const handleView = (circular) => {
-    alert(
-      `Circular: ${circular.title}\n\n${circular.description}\n\nDeadline: ${circular.deadline}`
-    );
+    setSelectedPosterCircular(circular);
   };
 
   return (
@@ -442,7 +342,7 @@ function MyCirculars() {
 
                 <div
                   className="circular-table-row"
-                  key={circular.id}
+                  key={circular._id || circular.id}
                 >
 
                   <div className="circular-title-cell">
@@ -466,7 +366,7 @@ function MyCirculars() {
                         )}
 
                         <span>
-                          {circular.status}
+                          {circular.status || "Published"}
                         </span>
 
                       </div>
@@ -478,37 +378,54 @@ function MyCirculars() {
 
                   <div>
                     <span
-                      className={`category-badge ${circular.category
+                      className={`category-badge ${(circular.category || "General")
                         .toLowerCase()
                         .replace(/\s+/g, "-")}`}
                     >
-                      {circular.category}
+                      {circular.category || "General"}
                     </span>
                   </div>
 
 
                   <div className="audience-text">
-                    {circular.audience}
+                    {circular.targetAudience || circular.audience || "All Students"}
                   </div>
 
 
                   <div className="date-text">
-                    {circular.date}
+                    {circular.date || "—"}
                   </div>
 
 
                   <div className="date-text">
-                    {circular.deadline}
+                    {circular.deadline || "—"}
                   </div>
 
 
                   <div>
 
                     <button
-                      className="view-circular-btn"
+                      className={`view-circular-btn ${
+                        isEventCircular(circular)
+                          ? "btn-event-pill"
+                          : isExamCircular(circular)
+                          ? "btn-exam-pill"
+                          : "btn-notice-pill"
+                      }`}
                       onClick={() => handleView(circular)}
+                      title={
+                        isEventCircular(circular)
+                          ? "View Event Poster Flyer"
+                          : isExamCircular(circular)
+                          ? "View Examination Timetable Date-Sheet"
+                          : "View Official Faculty Notice"
+                      }
                     >
-                      View
+                      {isEventCircular(circular)
+                        ? "🎨 Poster"
+                        : isExamCircular(circular)
+                        ? "📅 Timetable"
+                        : "💬 Notice"}
                     </button>
 
                   </div>
@@ -539,7 +456,12 @@ function MyCirculars() {
         </section>
 
       </main>
-
+      {selectedPosterCircular && (
+        <CircularPosterModal
+          circular={selectedPosterCircular}
+          onClose={() => setSelectedPosterCircular(null)}
+        />
+      )}
     </div>
   );
 }

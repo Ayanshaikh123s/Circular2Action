@@ -1,102 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { actionAPI } from "./api";
+import ActionNotificationModal from "./ActionNotificationModal";
 import "./MyActions.css";
 
-const actionData = [
-  {
-    id: 1,
-    title: "Submit Examination Form",
-    category: "Examination",
-    assignedDate: "28 Sep 2026",
-    deadline: "10 Oct 2026",
-    status: "Pending",
-    priority: "High",
-    description:
-      "Complete and submit the semester examination form before the deadline.",
-  },
-  {
-    id: 2,
-    title: "Submit Project Report",
-    category: "Academic",
-    assignedDate: "26 Sep 2026",
-    deadline: "15 Oct 2026",
-    status: "In Progress",
-    priority: "High",
-    description:
-      "Prepare and submit the Semester 5 project report according to the given guidelines.",
-  },
-  {
-    id: 3,
-    title: "Register for Data Analytics Workshop",
-    category: "Events",
-    assignedDate: "22 Sep 2026",
-    deadline: "05 Oct 2026",
-    status: "Pending",
-    priority: "Medium",
-    description:
-      "Complete registration for the Data Analytics workshop before registration closes.",
-  },
-  {
-    id: 4,
-    title: "Return Library Books",
-    category: "Student Services",
-    assignedDate: "20 Sep 2026",
-    deadline: "30 Sep 2026",
-    status: "Pending",
-    priority: "High",
-    description:
-      "Return all issued library books before the specified deadline.",
-  },
-  {
-    id: 5,
-    title: "Complete Semester Registration",
-    category: "Academic",
-    assignedDate: "28 Jul 2026",
-    deadline: "08 Aug 2026",
-    status: "Completed",
-    priority: "Medium",
-    description:
-      "Semester registration was successfully completed.",
-  },
-  {
-    id: 6,
-    title: "Renew Student ID Card",
-    category: "Student Services",
-    assignedDate: "10 Sep 2026",
-    deadline: "25 Sep 2026",
-    status: "Completed",
-    priority: "Medium",
-    description:
-      "Student ID card renewal process has been completed.",
-  },
-  {
-    id: 7,
-    title: "Submit Internal Assessment",
-    category: "Academic",
-    assignedDate: "15 Jul 2026",
-    deadline: "25 Jul 2026",
-    status: "Completed",
-    priority: "Medium",
-    description:
-      "Internal assessment work was submitted successfully.",
-  },
-  {
-    id: 8,
-    title: "Register for Sports Week",
-    category: "Events",
-    assignedDate: "10 Jul 2026",
-    deadline: "18 Jul 2026",
-    status: "Completed",
-    priority: "Low",
-    description:
-      "Sports Week registration was completed successfully.",
-  },
-];
-
 function MyActions() {
+  const [actions, setActions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [selectedAction, setSelectedAction] = useState(null);
 
   const storedUser = JSON.parse(
     localStorage.getItem("circular2actionUser") || "null"
@@ -105,23 +19,51 @@ function MyActions() {
   const studentName = storedUser?.name || "Student";
   const semester = storedUser?.semester || "";
 
-  const filteredActions = actionData.filter((action) => {
+  const loadActions = async () => {
+    try {
+      const data = await actionAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.actions || []);
+      setActions(list);
+    } catch (err) {
+      console.error("Failed to fetch actions:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadActions();
+  }, []);
+
+  const filteredActions = actions.filter((action) => {
+    const title = action.title || "";
+    const category = action.category || "";
+    const status = action.status || "Pending";
+
     const matchesSearch =
-      action.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      action.category.toLowerCase().includes(searchTerm.toLowerCase());
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
-      statusFilter === "All" || action.status === statusFilter;
+      statusFilter === "All" || status === statusFilter;
 
     const matchesCategory =
-      categoryFilter === "All" || action.category === categoryFilter;
+      categoryFilter === "All" || category === categoryFilter;
 
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
   const handleView = (action) => {
-    alert(
-      `Action: ${action.title}\n\nCategory: ${action.category}\nPriority: ${action.priority}\nAssigned: ${action.assignedDate}\nDeadline: ${action.deadline}\nStatus: ${action.status}\n\n${action.description}`
+    setSelectedAction(action);
+  };
+
+  const handleStatusChange = (updatedAction) => {
+    setActions((prev) =>
+      prev.map((a) =>
+        (a._id || a.id) === (updatedAction._id || updatedAction.id)
+          ? { ...a, status: updatedAction.status }
+          : a
+      )
     );
   };
 
@@ -244,7 +186,7 @@ function MyActions() {
           <div className="actions-summary-card">
             <div className="actions-summary-icon">✓</div>
             <div>
-              <strong>{actionData.length}</strong>
+              <strong>{actions.length}</strong>
               <p>Total Actions</p>
             </div>
           </div>
@@ -256,7 +198,7 @@ function MyActions() {
             <div>
               <strong>
                 {
-                  actionData.filter(
+                  actions.filter(
                     (item) => item.status === "Pending"
                   ).length
                 }
@@ -272,7 +214,7 @@ function MyActions() {
             <div>
               <strong>
                 {
-                  actionData.filter(
+                  actions.filter(
                     (item) => item.status === "In Progress"
                   ).length
                 }
@@ -288,7 +230,7 @@ function MyActions() {
             <div>
               <strong>
                 {
-                  actionData.filter(
+                  actions.filter(
                     (item) => item.status === "Completed"
                   ).length
                 }
@@ -348,7 +290,7 @@ function MyActions() {
           <div className="actions-list">
             {filteredActions.length > 0 ? (
               filteredActions.map((action) => (
-                <div className="action-item" key={action.id}>
+                <div className="action-item" key={action._id || action.id}>
                   <div className="action-item-left">
                     <div className="action-icon">✓</div>
 
@@ -357,32 +299,32 @@ function MyActions() {
                         <h3>{action.title}</h3>
 
                         <span
-                          className={`priority-badge ${action.priority.toLowerCase()}`}
+                          className={`priority-badge ${(action.priority || "Normal").toLowerCase()}`}
                         >
-                          {action.priority}
+                          {action.priority || "Normal"}
                         </span>
                       </div>
 
                       <div className="action-meta">
-                        <span>{action.category}</span>
+                        <span>{action.category || "General"}</span>
                         <span>•</span>
-                        <span>Assigned {action.assignedDate}</span>
+                        <span>Assigned {action.assignedDate || action.date || "Recent"}</span>
                       </div>
 
                       <div className="action-deadline">
                         <span>Deadline</span>
-                        <strong>{action.deadline}</strong>
+                        <strong>{action.deadline || "—"}</strong>
                       </div>
                     </div>
                   </div>
 
                   <div className="action-item-right">
                     <span
-                      className={`action-status ${action.status
+                      className={`action-status ${(action.status || "Pending")
                         .toLowerCase()
                         .replace(" ", "-")}`}
                     >
-                      {action.status}
+                      {action.status || "Pending"}
                     </span>
 
                     <button
@@ -406,6 +348,14 @@ function MyActions() {
           </div>
         </section>
       </main>
+
+      {selectedAction && (
+        <ActionNotificationModal
+          action={selectedAction}
+          onClose={() => setSelectedAction(null)}
+          onStatusChange={handleStatusChange}
+        />
+      )}
     </div>
   );
 }

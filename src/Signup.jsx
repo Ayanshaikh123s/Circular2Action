@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { authAPI } from "./api";
 import "./Signup.css";
 
 function Signup() {
@@ -7,6 +8,7 @@ function Signup() {
 
   const [accountType, setAccountType] = useState("");
   const [semester, setSemester] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -27,7 +29,7 @@ function Signup() {
     }));
   };
 
-  const handleCreateAccount = (e) => {
+  const handleCreateAccount = async (e) => {
     e.preventDefault();
 
     // Check required fields
@@ -61,39 +63,27 @@ function Signup() {
       return;
     }
 
-    // Check existing account
-    const existingUser = JSON.parse(
-      localStorage.getItem("circular2actionUser") || "null"
-    );
+    try {
+      setLoading(true);
+      const userPayload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        password: formData.password,
+        role: accountType === "student" ? "Student" : "Admin",
+        semester: accountType === "student" ? semester : "",
+        course: "BCA",
+        department: "Computer Applications",
+      };
 
-    if (
-      existingUser &&
-      existingUser.email.toLowerCase() === formData.email.trim().toLowerCase()
-    ) {
-      alert("An account with this email already exists.");
-      return;
+      await authAPI.signup(userPayload);
+      alert("Account created successfully!");
+      navigate("/login");
+    } catch (err) {
+      alert(err.message || "Failed to create account. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    // Create user object
-    const user = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      phone: formData.phone.trim(),
-      password: formData.password,
-      role: accountType === "student" ? "Student" : "Admin",
-      semester: accountType === "student" ? semester : "",
-    };
-
-    // Save account
-    localStorage.setItem(
-      "circular2actionUser",
-      JSON.stringify(user)
-    );
-
-    alert("Account created successfully!");
-
-    // Go to Login
-    navigate("/login");
   };
 
   return (

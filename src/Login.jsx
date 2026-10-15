@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { authAPI } from "./api";
 import "./Login.css";
 
 function Login() {
@@ -7,38 +8,25 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const storedUser = JSON.parse(
-      localStorage.getItem("circular2actionUser") || "null"
-    );
+    try {
+      setLoading(true);
+      const res = await authAPI.login(email.trim().toLowerCase(), password);
 
-    // Check if account exists
-    if (!storedUser) {
-      alert("No account found. Please create an account first.");
-      return;
-    }
-
-    // Check email and password
-    if (
-      email.trim().toLowerCase() !==
-        storedUser.email.trim().toLowerCase() ||
-      password !== storedUser.password
-    ) {
-      alert("Invalid email or password.");
-      return;
-    }
-
-    // Login successful
-    localStorage.setItem("isLoggedIn", "true");
-
-    // Role based dashboard
-    if (storedUser.role === "Admin") {
-      navigate("/admin-dashboard");
-    } else if (storedUser.role === "Student") {
-      navigate("/student-dashboard");
+      const user = res.user;
+      if (user.role === "Admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/student-dashboard");
+      }
+    } catch (err) {
+      alert(err.message || "Invalid email or password.");
+    } finally {
+      setLoading(false);
     }
   };
 

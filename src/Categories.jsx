@@ -1,58 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { categoryAPI } from "./api";
 import "./Categories.css";
 
 function Categories() {
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Academic",
-      description: "Academic announcements and study related updates.",
-      count: 28,
-      color: "purple",
-    },
-    {
-      id: 2,
-      name: "Examination",
-      description: "Exam schedules, forms, results and examination notices.",
-      count: 24,
-      color: "blue",
-    },
-    {
-      id: 3,
-      name: "Events",
-      description: "Workshops, seminars, competitions and college events.",
-      count: 19,
-      color: "green",
-    },
-    {
-      id: 4,
-      name: "Finance",
-      description: "Fee payments, scholarships and financial notices.",
-      count: 15,
-      color: "orange",
-    },
-    {
-      id: 5,
-      name: "Student Services",
-      description: "Student related announcements and important information.",
-      count: 22,
-      color: "pink",
-    },
-    {
-      id: 6,
-      name: "General",
-      description: "General college announcements and notices.",
-      count: 20,
-      color: "gray",
-    },
-  ]);
-
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
 
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
+
+  const loadCategories = async () => {
+    try {
+      const data = await categoryAPI.getAll();
+      const list = Array.isArray(data) ? data : (data?.categories || []);
+      setCategories(list);
+    } catch (err) {
+      console.error("Failed to load categories:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   const openAddModal = () => {
     setEditingCategory(null);
@@ -75,50 +49,59 @@ function Categories() {
     setCategoryDescription("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!categoryName.trim()) {
       return;
     }
 
-    if (editingCategory) {
-      setCategories(
-        categories.map((category) =>
-          category.id === editingCategory.id
-            ? {
-                ...category,
-                name: categoryName,
-                description: categoryDescription,
-              }
-            : category
-        )
-      );
-    } else {
-      const newCategory = {
-        id: Date.now(),
-        name: categoryName,
-        description:
-          categoryDescription || "New circular category.",
-        count: 0,
-        color: "purple",
-      };
+    try {
+      if (editingCategory) {
+        const catId = editingCategory._id || editingCategory.id;
+        const updated = await categoryAPI.update(catId, {
+          name: categoryName,
+          description: categoryDescription,
+        });
 
-      setCategories([...categories, newCategory]);
+        setCategories(
+          categories.map((category) =>
+            (category._id || category.id) === catId
+              ? { ...category, ...updated, name: categoryName, description: categoryDescription }
+              : category
+          )
+        );
+      } else {
+        const colors = ["purple", "blue", "green", "orange", "pink", "gray"];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const created = await categoryAPI.create({
+          name: categoryName,
+          description: categoryDescription || "New circular category.",
+          color: randomColor,
+        });
+
+        setCategories([...categories, created]);
+      }
+      closeModal();
+    } catch (err) {
+      alert(err.message || "Failed to save category");
     }
-
-    closeModal();
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this category?"
     );
 
     if (confirmDelete) {
-      setCategories(
-        categories.filter((category) => category.id !== id)
-      );
+      try {
+        await categoryAPI.delete(id);
+        setCategories(
+          categories.filter((category) => (category._id || category.id) !== id)
+        );
+      } catch (err) {
+        alert(err.message || "Failed to delete category");
+      }
     }
   };
 
@@ -273,7 +256,7 @@ function Categories() {
               <span>Total Circulars</span>
               <strong>
                 {categories.reduce(
-                  (total, category) => total + category.count,
+                  (total, category) => total + (category.count || 0),
                   0
                 )}
               </strong>
@@ -320,13 +303,13 @@ function Categories() {
 
               <div
                 className="category-card"
-                key={category.id}
+                key={category._id || category.id}
               >
 
                 <div className="category-card-top">
 
                   <div
-                    className={`category-symbol ${category.color}`}
+                    className={`category-symbol ${category.color || "purple"}`}
                   >
                     ◇
                   </div>
@@ -346,7 +329,7 @@ function Categories() {
                     <button
                       className="icon-button delete"
                       onClick={() =>
-                        handleDelete(category.id)
+                        handleDelete(category._id || category.id)
                       }
                       title="Delete category"
                     >
@@ -368,7 +351,7 @@ function Categories() {
                 <div className="category-footer">
 
                   <div>
-                    <strong>{category.count}</strong>
+                    <strong>{category.count || 0}</strong>
                     <span>Circulars</span>
                   </div>
 

@@ -1,16 +1,95 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { circularAPI } from "./api";
 import "./UploadCircular.css";
 
 function UploadCircular() {
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("academic");
+  const [circularNumber, setCircularNumber] = useState("");
+  const [description, setDescription] = useState("");
   const [targetType, setTargetType] = useState("all");
+  const [semester, setSemester] = useState("1");
+  const [department, setDepartment] = useState("bca");
+  const [actionRequired, setActionRequired] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [priority, setPriority] = useState("normal");
   const [fileName, setFileName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
     if (file) {
       setFileName(file.name);
+    }
+  };
+
+  const handleSave = async (status = "Published") => {
+    if (!title.trim()) {
+      alert("Please enter circular title.");
+      return;
+    }
+    if (!description.trim()) {
+      alert("Please enter circular description.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      let targetValue = "";
+      let audience = "All Students";
+      if (targetType === "semester") {
+        targetValue = semester;
+        audience = `Semester ${semester}`;
+      } else if (targetType === "department") {
+        targetValue = department;
+        audience = `${department.toUpperCase()} Students`;
+      }
+
+      const formattedDeadline = deadline
+        ? new Date(deadline).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+        : "—";
+
+      // Capitalize category properly
+      const categoryMap = {
+        academic: "Academic",
+        examination: "Examination",
+        event: "Events",
+        finance: "Finance",
+        general: "General",
+        "student-affairs": "Student Services",
+      };
+
+      const payload = {
+        title: title.trim(),
+        circularNumber: circularNumber.trim() || undefined,
+        category: categoryMap[category] || "General",
+        description: description.trim(),
+        targetType,
+        targetValue,
+        audience,
+        actionRequired: actionRequired.trim(),
+        deadline: formattedDeadline,
+        priority: priority.charAt(0).toUpperCase() + priority.slice(1),
+        status,
+        fileName,
+      };
+
+      await circularAPI.create(payload);
+      alert(`Circular ${status === "Draft" ? "saved as draft" : "published"} successfully! It is now live for students.`);
+      navigate("/circular-list");
+    } catch (err) {
+      alert(err.message || "Failed to publish circular.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -160,6 +239,9 @@ function UploadCircular() {
                   id="title"
                   type="text"
                   placeholder="e.g. Internal Examination Schedule"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
                 />
 
               </div>
@@ -173,11 +255,11 @@ function UploadCircular() {
                   <span>*</span>
                 </label>
 
-                <select id="category" defaultValue="">
-                  <option value="" disabled>
-                    Select category
-                  </option>
-
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
                   <option value="academic">
                     Academic
                   </option>
@@ -217,6 +299,8 @@ function UploadCircular() {
                   id="circularNumber"
                   type="text"
                   placeholder="e.g. C2A/2026/045"
+                  value={circularNumber}
+                  onChange={(e) => setCircularNumber(e.target.value)}
                 />
 
               </div>
@@ -234,6 +318,9 @@ function UploadCircular() {
                   id="description"
                   rows="5"
                   placeholder="Write the important information students need to know..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
                 ></textarea>
 
                 <small>
@@ -355,18 +442,17 @@ function UploadCircular() {
                   Select Semester
                 </label>
 
-                <select id="semester" defaultValue="">
-                  <option value="" disabled>
-                    Choose semester
-                  </option>
-
+                <select
+                  id="semester"
+                  value={semester}
+                  onChange={(e) => setSemester(e.target.value)}
+                >
                   <option value="1">Semester 1</option>
                   <option value="2">Semester 2</option>
                   <option value="3">Semester 3</option>
                   <option value="4">Semester 4</option>
                   <option value="5">Semester 5</option>
                   <option value="6">Semester 6</option>
-                  
                 </select>
 
               </div>
@@ -381,11 +467,11 @@ function UploadCircular() {
                   Select Department
                 </label>
 
-                <select id="department" defaultValue="">
-                  <option value="" disabled>
-                    Choose department
-                  </option>
-
+                <select
+                  id="department"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                >
                   <option value="bca">
                     BCA
                   </option>
@@ -441,6 +527,8 @@ function UploadCircular() {
                   id="action"
                   rows="4"
                   placeholder="e.g. Students must submit the examination form before the deadline."
+                  value={actionRequired}
+                  onChange={(e) => setActionRequired(e.target.value)}
                 ></textarea>
 
               </div>
@@ -455,6 +543,8 @@ function UploadCircular() {
                 <input
                   id="actionDate"
                   type="date"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
                 />
 
               </div>
@@ -466,7 +556,11 @@ function UploadCircular() {
                   Priority
                 </label>
 
-                <select id="priority" defaultValue="normal">
+                <select
+                  id="priority"
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value)}
+                >
 
                   <option value="low">
                     Low
@@ -583,15 +677,19 @@ function UploadCircular() {
             <button
               type="button"
               className="draft-btn"
+              disabled={loading}
+              onClick={() => handleSave("Draft")}
             >
-              Save as Draft
+              {loading ? "Saving..." : "Save as Draft"}
             </button>
 
             <button
               type="button"
               className="publish-btn"
+              disabled={loading}
+              onClick={() => handleSave("Published")}
             >
-              Publish Circular
+              {loading ? "Publishing..." : "Publish Circular"}
             </button>
 
           </div>

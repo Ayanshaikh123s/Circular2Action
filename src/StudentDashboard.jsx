@@ -1,5 +1,31 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { circularAPI, actionAPI, notificationAPI, statsAPI } from "./api";
+import CircularPosterModal from "./CircularPosterModal";
+import ActionNotificationModal from "./ActionNotificationModal";
+import { isEventCircular, isExamCircular } from "./utils/circularClassifier";
 import "./StudentDashboard.css";
+
+function formatDeadlineDisplay(rawDate) {
+  if (!rawDate || rawDate === "—" || rawDate === "Not set") {
+    return { day: "—", month: "—", label: "No date" };
+  }
+  const parsed = new Date(rawDate);
+  if (!isNaN(parsed.getTime())) {
+    const day = String(parsed.getDate()).padStart(2, "0");
+    const month = parsed.toLocaleString("en-US", { month: "short" }).toUpperCase();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffDays = Math.ceil((parsed.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const label = diffDays < 0 ? "Past" : diffDays === 0 ? "Today" : diffDays === 1 ? "1 day" : `${diffDays} days`;
+    return { day, month, label };
+  }
+  const parts = String(rawDate).trim().split(" ");
+  if (parts.length >= 2) {
+    return { day: parts[0], month: parts[1].toUpperCase(), label: rawDate };
+  }
+  return { day: "!", month: "DUE", label: rawDate };
+}
 
 function StudentDashboard() {
   const storedUser = JSON.parse(
@@ -9,60 +35,95 @@ function StudentDashboard() {
   const studentName = storedUser?.name || "Student";
   const firstName = studentName.split(" ")[0];
 
-  const recentCirculars = [
-    {
-      title: "Internal Examination Schedule",
-      category: "Examination",
-      date: "28 Sep 2026",
-      deadline: "10 Oct 2026",
-      status: "Important",
-    },
-    {
-      title: "Semester 5 Project Submission Guidelines",
-      category: "Academic",
-      date: "26 Sep 2026",
-      deadline: "15 Oct 2026",
-      status: "Action Required",
-    },
-    {
-      title: "Workshop Registration - Data Analytics",
-      category: "Events",
-      date: "22 Sep 2026",
-      deadline: "05 Oct 2026",
-      status: "Open",
-    },
-    {
-      title: "Library Book Return Notice",
-      category: "Student Services",
-      date: "20 Sep 2026",
-      deadline: "30 Sep 2026",
-      status: "Reminder",
-    },
-  ];
+  const [stats, setStats] = useState({
+    circularsCount: 0,
+    pendingActionsCount: 0,
+    completedActionsCount: 0,
+    notificationsCount: 0,
+  });
+  const [recentCirculars, setRecentCirculars] = useState([]);
+  const [upcomingActions, setUpcomingActions] = useState([]);
+  const [recentNotifications, setRecentNotifications] = useState([]);
+  const [upcomingDeadlines, setUpcomingDeadlines] = useState([]);
+  const [selectedPosterCircular, setSelectedPosterCircular] = useState(null);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const upcomingActions = [
-    {
-      title: "Submit Examination Form",
-      circular: "Internal Examination Schedule",
-      deadline: "10 Oct 2026",
-      priority: "High",
-      status: "Pending",
-    },
-    {
-      title: "Submit Project Report",
-      circular: "Semester 5 Project Submission Guidelines",
-      deadline: "15 Oct 2026",
-      priority: "High",
-      status: "In Progress",
-    },
-    {
-      title: "Register for Data Analytics Workshop",
-      circular: "Workshop Registration",
-      deadline: "05 Oct 2026",
-      priority: "Normal",
-      status: "Pending",
-    },
-  ];
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        const [statsData, circularsData, actionsData, notifsData] = await Promise.allSettled([
+          statsAPI.getStudentStats(),
+          circularAPI.getAll(),
+          actionAPI.getAll(),
+          notificationAPI.getAll(),
+        ]);
+
+        const circList = circularsData.status === "fulfilled"
+          ? (Array.isArray(circularsData.value) ? circularsData.value : (circularsData.value?.circulars || []))
+          : [];
+        setRecentCirculars(circList.slice(0, 4));
+
+        const actList = actionsData.status === "fulfilled"
+          ? (Array.isArray(actionsData.value) ? actionsData.value : (actionsData.value?.actions || []))
+          : [];
+        const pending = actList.filter(a => a.status !== "Completed");
+        setUpcomingActions(pending.slice(0, 4));
+
+        const notifList = notifsData.status === "fulfilled"
+          ? (Array.isArray(notifsData.value) ? notifsData.value : (notifsData.value?.notifications || []))
+          : [];
+        setRecentNotifications(notifList.slice(0, 3));
+
+        // Derive upcoming deadlines from circulars & actions that have deadlines
+        const deadlines = [];
+        circList.forEach((c) => {
+          if (c.deadline && c.deadline !== "—" && c.deadline !== "Not set") {
+            deadlines.push({
+              id: `c_${c._id || c.id}`,
+              title: c.title,
+              category: c.category || "General",
+              rawDeadline: c.deadline,
+            });
+          }
+        });
+        actList.forEach((a) => {
+          if (a.deadline && a.deadline !== "—" && a.deadline !== "Not set") {
+            deadlines.push({
+              id: `a_${a._id || a.id}`,
+              title: a.title,
+              category: a.category || "Action",
+              rawDeadline: a.deadline,
+            });
+          }
+        });
+        setUpcomingDeadlines(deadlines.slice(0, 3));
+
+        if (statsData.status === "fulfilled") {
+          const s = statsData.value?.stats || statsData.value || {};
+          setStats({
+            circularsCount: s.circularsCount ?? s.myCircularsCount ?? circList.length,
+            pendingActionsCount: s.pendingActionsCount ?? pending.length,
+            completedActionsCount: s.completedActionsCount ?? actList.filter(a => a.status === "Completed").length,
+            notificationsCount: s.notificationsCount ?? notifList.filter(n => n.unread).length,
+          });
+        } else {
+          setStats({
+            circularsCount: circList.length,
+            pendingActionsCount: pending.length,
+            completedActionsCount: actList.filter(a => a.status === "Completed").length,
+            notificationsCount: notifList.filter(n => n.unread).length,
+          });
+        }
+      } catch (err) {
+        console.error("Error loading student dashboard data:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <div className="student-layout">
@@ -250,7 +311,7 @@ function StudentDashboard() {
               </div>
             </div>
 
-            <h2>24</h2>
+            <h2>{stats.circularsCount}</h2>
 
             <p>Received this semester</p>
           </div>
@@ -265,7 +326,7 @@ function StudentDashboard() {
               </div>
             </div>
 
-            <h2>3</h2>
+            <h2>{stats.pendingActionsCount}</h2>
 
             <p>Need your attention</p>
           </div>
@@ -280,7 +341,7 @@ function StudentDashboard() {
               </div>
             </div>
 
-            <h2>18</h2>
+            <h2>{stats.completedActionsCount}</h2>
 
             <p>Successfully completed</p>
           </div>
@@ -295,7 +356,7 @@ function StudentDashboard() {
               </div>
             </div>
 
-            <h2>5</h2>
+            <h2>{stats.notificationsCount}</h2>
 
             <p>Unread notifications</p>
           </div>
@@ -333,52 +394,95 @@ function StudentDashboard() {
 
             <div className="my-circular-list">
 
-              {recentCirculars.map((circular, index) => (
-                <div
-                  className="my-circular-item"
-                  key={index}
-                >
+              {recentCirculars.length > 0 ? (
+                recentCirculars.map((circular, index) => {
+                  const displayStatus = circular.actionRequired
+                    ? "Action Required"
+                    : circular.priority === "High"
+                    ? "Important"
+                    : circular.status || "Published";
 
-                  <div className="my-circular-icon">
-                    ▤
-                  </div>
+                  return (
+                    <div
+                      className="my-circular-item interactive"
+                      key={circular._id || circular.id || index}
+                      onClick={() => setSelectedPosterCircular(circular)}
+                      style={{ cursor: "pointer" }}
+                      title="Click to view full college announcement poster"
+                    >
 
-                  <div className="my-circular-content">
+                      <div className="my-circular-icon">
+                        ▤
+                      </div>
 
-                    <h4>{circular.title}</h4>
+                      <div className="my-circular-content">
 
-                    <div className="my-circular-meta">
+                        <h4>{circular.title}</h4>
 
-                      <span className="student-category">
-                        {circular.category}
-                      </span>
+                        <div className="my-circular-meta">
 
-                      <span>
-                        {circular.date}
-                      </span>
+                          <span className="student-category">
+                            {circular.category}
+                          </span>
+
+                          <span>
+                            {circular.date}
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <div className="my-circular-status">
+
+                        <span
+                          className={
+                            displayStatus === "Action Required"
+                              ? "action-required"
+                              : displayStatus === "Important"
+                              ? "important-status"
+                              : "normal-status"
+                          }
+                        >
+                          {displayStatus}
+                        </span>
+
+                        <button
+                          type="button"
+                          className={`view-poster-pill-btn ${
+                            isEventCircular(circular)
+                              ? "btn-is-event"
+                              : isExamCircular(circular)
+                              ? "btn-is-exam"
+                              : "btn-is-notice"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPosterCircular(circular);
+                          }}
+                          title={
+                            isEventCircular(circular)
+                              ? "View Official Event Poster"
+                              : isExamCircular(circular)
+                              ? "View Examination Timetable Date-Sheet"
+                              : "View Official Faculty Notice"
+                          }
+                        >
+                          {isEventCircular(circular)
+                            ? "🎨 View Poster"
+                            : isExamCircular(circular)
+                            ? "📅 View Timetable"
+                            : "💬 View Notice"}
+                        </button>
+
+                      </div>
 
                     </div>
-
-                  </div>
-
-                  <div className="my-circular-status">
-
-                    <span
-                      className={
-                        circular.status === "Action Required"
-                          ? "action-required"
-                          : circular.status === "Important"
-                          ? "important-status"
-                          : "normal-status"
-                      }
-                    >
-                      {circular.status}
-                    </span>
-
-                  </div>
-
-                </div>
-              ))}
+                  );
+                })
+              ) : (
+                <p style={{ color: "#64748b", padding: "16px", fontSize: "14px" }}>No circulars published yet</p>
+              )}
 
             </div>
 
@@ -411,40 +515,47 @@ function StudentDashboard() {
 
             <div className="student-action-list">
 
-              {upcomingActions.map((action, index) => (
-                <div
-                  className="student-action-item"
-                  key={index}
-                >
+              {upcomingActions.length > 0 ? (
+                upcomingActions.map((action, index) => (
+                  <div
+                    className="student-action-item"
+                    key={action._id || action.id || index}
+                    onClick={() => setSelectedAction(action)}
+                    style={{ cursor: "pointer" }}
+                    title="Click to view action directive"
+                  >
 
-                  <div className="action-check">
-                    {action.status === "In Progress"
-                      ? "..."
-                      : "!"}
-                  </div>
+                    <div className="action-check">
+                      {action.status === "In Progress"
+                        ? "..."
+                        : "!"}
+                    </div>
 
-                  <div className="action-content">
+                    <div className="action-content">
 
-                    <h4>{action.title}</h4>
+                      <h4>{action.title}</h4>
 
-                    <span>
-                      Due {action.deadline}
+                      <span>
+                        Due {action.deadline}
+                      </span>
+
+                    </div>
+
+                    <span
+                      className={
+                        action.priority === "High" || action.priority === "Urgent"
+                          ? "priority-high"
+                          : "priority-normal"
+                      }
+                    >
+                      {action.priority}
                     </span>
 
                   </div>
-
-                  <span
-                    className={
-                      action.priority === "High"
-                        ? "priority-high"
-                        : "priority-normal"
-                    }
-                  >
-                    {action.priority}
-                  </span>
-
-                </div>
-              ))}
+                ))
+              ) : (
+                <p style={{ color: "#64748b", padding: "16px", fontSize: "14px" }}>No upcoming pending actions</p>
+              )}
 
             </div>
 
@@ -482,63 +593,28 @@ function StudentDashboard() {
 
 
             <div className="deadline-list">
-
-              <div className="deadline-item">
-
-                <div className="deadline-date">
-                  <strong>30</strong>
-                  <span>SEP</span>
-                </div>
-
-                <div>
-                  <h4>Library Book Return</h4>
-                  <p>Student Services</p>
-                </div>
-
-                <span className="deadline-days">
-                  1 day
-                </span>
-
-              </div>
-
-
-              <div className="deadline-item">
-
-                <div className="deadline-date">
-                  <strong>05</strong>
-                  <span>OCT</span>
-                </div>
-
-                <div>
-                  <h4>Workshop Registration</h4>
-                  <p>Events</p>
-                </div>
-
-                <span className="deadline-days">
-                  6 days
-                </span>
-
-              </div>
-
-
-              <div className="deadline-item">
-
-                <div className="deadline-date">
-                  <strong>10</strong>
-                  <span>OCT</span>
-                </div>
-
-                <div>
-                  <h4>Examination Form</h4>
-                  <p>Examination</p>
-                </div>
-
-                <span className="deadline-days">
-                  11 days
-                </span>
-
-              </div>
-
+              {upcomingDeadlines.length > 0 ? (
+                upcomingDeadlines.map((item) => {
+                  const badge = formatDeadlineDisplay(item.rawDeadline);
+                  return (
+                    <div className="deadline-item" key={item.id}>
+                      <div className="deadline-date">
+                        <strong>{badge.day}</strong>
+                        <span>{badge.month}</span>
+                      </div>
+                      <div>
+                        <h4>{item.title}</h4>
+                        <p>{item.category}</p>
+                      </div>
+                      <span className="deadline-days">{badge.label}</span>
+                    </div>
+                  );
+                })
+              ) : (
+                <p style={{ color: "#64748b", padding: "16px", fontSize: "14px" }}>
+                  No upcoming deadlines
+                </p>
+              )}
             </div>
 
           </div>
@@ -570,55 +646,30 @@ function StudentDashboard() {
 
             <div className="student-notification-list">
 
-              <div className="student-notification-item unread">
+              {recentNotifications.length > 0 ? (
+                recentNotifications.map((notif, index) => (
+                  <div
+                    className={`student-notification-item ${notif.unread ? "unread" : ""}`}
+                    key={notif._id || notif.id || index}
+                  >
 
-                <div className="notification-dot"></div>
+                    <div className={`notification-dot ${notif.unread ? "" : "read"}`}></div>
 
-                <div>
-                  <h4>
-                    New examination schedule published
-                  </h4>
+                    <div>
+                      <h4>
+                        {notif.title}
+                      </h4>
 
-                  <span>
-                    2 hours ago
-                  </span>
-                </div>
+                      <span>
+                        {notif.time || notif.date || "Recent"}
+                      </span>
+                    </div>
 
-              </div>
-
-
-              <div className="student-notification-item unread">
-
-                <div className="notification-dot"></div>
-
-                <div>
-                  <h4>
-                    Project submission deadline updated
-                  </h4>
-
-                  <span>
-                    Yesterday
-                  </span>
-                </div>
-
-              </div>
-
-
-              <div className="student-notification-item">
-
-                <div className="notification-dot read"></div>
-
-                <div>
-                  <h4>
-                    Workshop registration is now open
-                  </h4>
-
-                  <span>
-                    2 days ago
-                  </span>
-                </div>
-
-              </div>
+                  </div>
+                ))
+              ) : (
+                <p style={{ color: "#64748b", padding: "16px", fontSize: "14px" }}>No recent notifications</p>
+              )}
 
             </div>
 
@@ -627,7 +678,30 @@ function StudentDashboard() {
         </section>
 
       </main>
-
+      {selectedPosterCircular && (
+        <CircularPosterModal
+          circular={selectedPosterCircular}
+          onClose={() => setSelectedPosterCircular(null)}
+        />
+      )}
+      {selectedAction && (
+        <ActionNotificationModal
+          action={selectedAction}
+          onClose={() => setSelectedAction(null)}
+          onStatusChange={(updatedAction) => {
+            if (updatedAction.status === "Completed") {
+              setUpcomingActions((prev) =>
+                prev.filter((a) => (a._id || a.id) !== (updatedAction._id || updatedAction.id))
+              );
+              setStats((prev) => ({
+                ...prev,
+                pendingActionsCount: Math.max(0, prev.pendingActionsCount - 1),
+                completedActionsCount: prev.completedActionsCount + 1,
+              }));
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
