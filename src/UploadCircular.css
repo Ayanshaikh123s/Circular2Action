@@ -110,7 +110,7 @@ body {
 .sidebar-brand h2 {
   margin: 0;
 
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 800;
 }
 
@@ -121,7 +121,7 @@ body {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -137,11 +137,11 @@ body {
 }
 
 .nav-section-title {
-  margin: 18px 10px 5px;
+  margin: 20px 10px 6px;
 
   color: var(--light-plum);
 
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
 
   letter-spacing: 1.3px;
@@ -150,7 +150,7 @@ body {
 .nav-item {
   min-height: 44px;
 
-  padding: 0 13px;
+  padding: 0 14px;
 
   display: flex;
   align-items: center;
@@ -160,8 +160,8 @@ body {
 
   text-decoration: none;
 
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 700;
 
   border-radius: 10px;
 
@@ -176,11 +176,11 @@ body {
 .nav-item.active {
   background: var(--lavender);
   color: var(--plum);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .nav-icon {
-  width: 20px;
+  width: 22px;
 
   display: flex;
   justify-content: center;
@@ -199,7 +199,8 @@ body {
   background: var(--plum);
   color: white;
 
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 800;
 
   display: flex;
   align-items: center;
@@ -252,7 +253,7 @@ body {
 
   color: var(--accent);
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
 
   letter-spacing: 1.5px;
@@ -261,7 +262,7 @@ body {
 .upload-header h1 {
   margin: 0;
 
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 800;
 
   letter-spacing: -1px;
@@ -272,11 +273,12 @@ body {
 
   color: var(--muted);
 
-  font-size: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
 }
 
 .secondary-header-btn {
-  padding: 11px 16px;
+  padding: 11px 18px;
 
   border: 1px solid var(--border);
 
@@ -288,8 +290,8 @@ body {
 
   text-decoration: none;
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
 
   transition: 0.2s ease;
 }
@@ -332,8 +334,8 @@ body {
 }
 
 .form-number {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
 
   flex-shrink: 0;
 
@@ -347,14 +349,14 @@ body {
   align-items: center;
   justify-content: center;
 
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
 }
 
 .form-card-header h2 {
   margin: 0;
 
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
 }
 
@@ -363,7 +365,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 
@@ -394,8 +397,8 @@ body {
 
   color: var(--text);
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
 .form-group label span {
@@ -422,7 +425,8 @@ body {
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 600;
 
   outline: none;
 
@@ -464,7 +468,8 @@ body {
 
   color: #9b919e;
 
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 
@@ -520,8 +525,8 @@ body {
 }
 
 .target-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
 
   flex-shrink: 0;
 
@@ -535,14 +540,15 @@ body {
   align-items: center;
   justify-content: center;
 
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .target-option strong {
   display: block;
 
-  font-size: 10px;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .target-option span {
@@ -552,7 +558,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
 
   line-height: 1.4;
 }
@@ -601,8 +608,8 @@ body {
 }
 
 .upload-icon {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
 
   margin-bottom: 10px;
 
@@ -616,12 +623,13 @@ body {
   align-items: center;
   justify-content: center;
 
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 800;
 }
 
 .upload-box strong {
-  font-size: 11px;
+  font-size: 14.5px;
+  font-weight: 800;
 }
 
 .upload-box span {
@@ -629,7 +637,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 
@@ -653,8 +662,8 @@ body {
 }
 
 .smart-icon {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
 
   flex-shrink: 0;
 
@@ -668,13 +677,14 @@ body {
   align-items: center;
   justify-content: center;
 
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .smart-info strong {
   display: block;
 
-  font-size: 11px;
+  font-size: 14.5px;
+  font-weight: 800;
 }
 
 .smart-info p {
@@ -682,7 +692,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 600;
 
   line-height: 1.5;
 }
@@ -690,7 +701,7 @@ body {
 .coming-soon {
   margin-left: auto;
 
-  padding: 5px 8px;
+  padding: 6px 11px;
 
   border-radius: 6px;
 
@@ -698,8 +709,8 @@ body {
 
   color: var(--accent);
 
-  font-size: 8px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
 
   white-space: nowrap;
 }
@@ -723,16 +734,16 @@ body {
 .cancel-btn,
 .draft-btn,
 .publish-btn {
-  height: 42px;
+  height: 44px;
 
-  padding: 0 17px;
+  padding: 0 20px;
 
   border-radius: 8px;
 
   font-family: inherit;
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
 
   cursor: pointer;
 

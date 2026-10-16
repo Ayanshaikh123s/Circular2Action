@@ -50,7 +50,7 @@
 
 .student-brand h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 800;
 }
 
@@ -58,7 +58,8 @@
   display: block;
   margin-top: 3px;
   color: #8b7d8d;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .student-navigation {
@@ -66,9 +67,9 @@
 }
 
 .student-nav-heading {
-  margin: 18px 10px 7px;
+  margin: 20px 10px 8px;
   color: #9a8e9d;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.1px;
 }
@@ -78,17 +79,17 @@
 }
 
 .student-nav-item {
-  height: 43px;
+  height: 44px;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 12px;
-  margin-bottom: 3px;
+  padding: 0 14px;
+  margin-bottom: 4px;
   border-radius: 9px;
   color: #675b6b;
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 700;
   transition: 0.2s ease;
 }
 
@@ -100,13 +101,13 @@
 .student-nav-item.active {
   background: #eee5f0;
   color: #6b4a72;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .student-nav-icon {
-  width: 20px;
+  width: 22px;
   text-align: center;
-  font-size: 16px;
+  font-size: 17px;
   color: #8b6a94;
 }
 
@@ -133,21 +134,22 @@
 .history-eyebrow {
   margin: 0 0 7px;
   color: #8b6a94;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.5px;
 }
 
 .history-header h1 {
   margin: 0;
-  font-size: 29px;
+  font-size: 30px;
   font-weight: 800;
 }
 
 .history-header > div:first-child > p:last-child {
   margin: 8px 0 0;
   color: #817582;
-  font-size: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
 }
 
 .history-profile {
@@ -174,14 +176,16 @@
 
 .history-profile strong {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .history-profile span {
   display: block;
   margin-top: 3px;
   color: #887b8b;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* SUMMARY */
@@ -205,14 +209,15 @@
 }
 
 .history-summary-icon {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 11px;
   background: #eee5f0;
   color: #6b4a72;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 19px;
   font-weight: 800;
 }
 
@@ -228,13 +233,15 @@
 
 .history-summary-card strong {
   display: block;
-  font-size: 21px;
+  font-size: 26px;
+  font-weight: 800;
 }
 
 .history-summary-card p {
   margin: 3px 0 0;
   color: #817582;
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 700;
 }
 
 /* CONTENT */
@@ -258,14 +265,15 @@
 
 .history-toolbar h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
 }
 
 .history-toolbar p {
   margin: 5px 0 0;
   color: #877b89;
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 .history-filters {
@@ -275,12 +283,12 @@
 
 .history-search {
   width: 220px;
-  height: 39px;
+  height: 42px;
   border: 1px solid #ded5e1;
   border-radius: 9px;
   display: flex;
   align-items: center;
-  padding: 0 11px;
+  padding: 0 12px;
 }
 
 .history-search span {
@@ -294,18 +302,20 @@
   outline: none;
   padding-left: 8px;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .history-filters select {
-  height: 39px;
-  padding: 0 11px;
+  height: 42px;
+  padding: 0 12px;
   border: 1px solid #ded5e1;
   border-radius: 9px;
   background: white;
   color: #5f5363;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 700;
   outline: none;
 }
 
@@ -336,8 +346,8 @@
 }
 
 .history-document-icon {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   border-radius: 11px;
   background: #eee5f0;
@@ -345,6 +355,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 19px;
   font-weight: 800;
 }
 
@@ -357,14 +368,14 @@
 
 .history-title-row h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
 }
 
 .history-status {
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 20px;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -383,7 +394,8 @@
   display: flex;
   gap: 7px;
   color: #8a7e8c;
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .history-dates {
@@ -391,20 +403,22 @@
   gap: 18px;
   margin-top: 8px;
   color: #9a909d;
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .history-dates strong {
   color: #6b4a72;
+  font-weight: 800;
 }
 
 .history-view-btn {
-  height: 35px;
-  padding: 0 14px;
+  height: 38px;
+  padding: 0 16px;
   border: 1px solid transparent;
   border-radius: 8px;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 12.5px;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -467,13 +481,15 @@
 
 .history-empty h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 .history-empty p {
   margin: 7px 0 0;
   color: #8a7e8c;
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 /* RESPONSIVE */

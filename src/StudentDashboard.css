@@ -52,7 +52,7 @@
 
 .student-brand h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 800;
   color: #302536;
 }
@@ -61,7 +61,8 @@
   display: block;
   margin-top: 3px;
   color: #8b7d8d;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .student-sidebar-nav {
@@ -77,23 +78,23 @@
 .student-nav-title {
   margin: 18px 10px 7px;
   color: #9a8e9d;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.1px;
 }
 
 .student-nav-item {
-  height: 43px;
+  height: 44px;
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 0 12px;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   border-radius: 9px;
   color: #675b6b;
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 700;
   transition: 0.2s ease;
 }
 
@@ -105,13 +106,13 @@
 .student-nav-item.active {
   background: #eee5f0;
   color: #6b4a72;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .student-nav-icon {
   width: 20px;
   text-align: center;
-  font-size: 16px;
+  font-size: 17px;
   color: #8b6a94;
 }
 
@@ -140,7 +141,7 @@
 .student-header-label {
   margin: 0 0 7px;
   color: #8b6a94;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 1.5px;
 }
@@ -156,7 +157,8 @@
 .student-header-subtitle {
   margin: 8px 0 0;
   color: #817582;
-  font-size: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
 }
 
 .student-profile-mini {
@@ -171,8 +173,8 @@
 }
 
 .student-avatar {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 11px;
   background: #e9dfec;
   color: #6b4a72;
@@ -184,7 +186,8 @@
 
 .student-profile-mini strong {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 800;
   color: #302536;
 }
 
@@ -192,7 +195,8 @@
   display: block;
   margin-top: 3px;
   color: #887b8b;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* ================= STATS ================= */
@@ -221,20 +225,20 @@
 
 .student-stat-top > span {
   color: #817582;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
 .student-stat-icon {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
   background: #eee5f0;
   color: #6b4a72;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
 }
 
@@ -244,8 +248,8 @@
 }
 
 .student-stat-card h2 {
-  margin: 17px 0 3px;
-  font-size: 25px;
+  margin: 17px 0 4px;
+  font-size: 28px;
   font-weight: 800;
   color: #302536;
 }
@@ -253,7 +257,8 @@
 .student-stat-card p {
   margin: 0;
   color: #8a7e8c;
-  font-size: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 /* ================= MAIN GRID ================= */
@@ -285,7 +290,7 @@
 
 .student-card-header h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: 17.5px;
   font-weight: 800;
   color: #302536;
 }
@@ -293,13 +298,14 @@
 .student-card-header p {
   margin: 5px 0 0;
   color: #877b89;
-  font-size: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .student-view-all {
   color: #6b4a72;
   text-decoration: none;
-  font-size: 10px;
+  font-size: 13.5px;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -329,8 +335,8 @@
 }
 
 .my-circular-icon {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   border-radius: 10px;
   background: #eee5f0;
@@ -338,7 +344,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 800;
 }
 
@@ -349,7 +355,7 @@
 
 .my-circular-content h4 {
   margin: 0;
-  font-size: 12px;
+  font-size: 14.5px;
   font-weight: 800;
   color: #302536;
   line-height: 1.4;
@@ -361,15 +367,17 @@
   gap: 8px;
   margin-top: 6px;
   color: #8a7e8c;
-  font-size: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .student-category {
-  padding: 4px 7px;
+  padding: 4px 8px;
   border-radius: 5px;
   background: #f3edf5;
   color: #6b4a72;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .my-circular-status {
@@ -378,9 +386,9 @@
 
 .my-circular-status span {
   display: inline-block;
-  padding: 5px 8px;
+  padding: 6px 10px;
   border-radius: 6px;
-  font-size: 8px;
+  font-size: 11.5px;
   font-weight: 800;
 }
 
@@ -416,9 +424,9 @@
   color: #ffffff;
   border: none;
   border-radius: 6px;
-  font-size: 9.5px;
+  font-size: 12px;
   font-weight: 800;
-  padding: 5px 10px;
+  padding: 6px 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -498,7 +506,7 @@
 
 .action-content h4 {
   margin: 0;
-  font-size: 11px;
+  font-size: 14.5px;
   line-height: 1.4;
   font-weight: 800;
   color: #302536;
@@ -508,14 +516,15 @@
   display: block;
   margin-top: 6px;
   color: #8a7e8c;
-  font-size: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .priority-high,
 .priority-normal {
-  padding: 5px 8px;
+  padding: 6px 10px;
   border-radius: 6px;
-  font-size: 8px;
+  font-size: 11.5px;
   font-weight: 800;
   flex-shrink: 0;
 }
@@ -558,10 +567,10 @@
 }
 
 .deadline-date {
-  width: 45px;
-  height: 47px;
+  width: 48px;
+  height: 50px;
   flex-shrink: 0;
-  border-radius: 9px;
+  border-radius: 10px;
   background: #eee5f0;
   display: flex;
   flex-direction: column;
@@ -570,15 +579,16 @@
 }
 
 .deadline-date strong {
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1;
+  font-weight: 800;
   color: #6b4a72;
 }
 
 .deadline-date span {
   margin-top: 4px;
   color: #8b6a94;
-  font-size: 7px;
+  font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 0.5px;
 }
@@ -590,7 +600,7 @@
 
 .deadline-item h4 {
   margin: 0;
-  font-size: 11px;
+  font-size: 14.5px;
   font-weight: 800;
   color: #302536;
 }
@@ -598,15 +608,16 @@
 .deadline-item p {
   margin: 5px 0 0;
   color: #8a7e8c;
-  font-size: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .deadline-days {
-  padding: 5px 7px;
+  padding: 5px 9px;
   border-radius: 6px;
   background: #f5efe3;
   color: #967b49;
-  font-size: 8px;
+  font-size: 11.5px;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -634,7 +645,7 @@
   width: 8px;
   height: 8px;
   flex-shrink: 0;
-  margin-top: 5px;
+  margin-top: 6px;
   border-radius: 50%;
   background: #8b6a94;
 }
@@ -645,7 +656,7 @@
 
 .student-notification-item h4 {
   margin: 0;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.5;
   font-weight: 700;
   color: #302536;
@@ -655,7 +666,8 @@
   display: block;
   margin-top: 5px;
   color: #8a7e8c;
-  font-size: 8px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* ================= RESPONSIVE ================= */

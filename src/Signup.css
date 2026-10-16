@@ -82,7 +82,7 @@
 
   color: #3d2942;
 
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
 
   letter-spacing: -0.4px;
@@ -91,14 +91,14 @@
 .signup-brand span {
   display: block;
 
-  margin-top: 2px;
+  margin-top: 3px;
 
   color: #806e83;
 
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
 
-  letter-spacing: 0.4px;
+  letter-spacing: 0.5px;
 }
 
 
@@ -117,10 +117,10 @@
 
   color: #8b6a94;
 
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
 
-  letter-spacing: 1.7px;
+  letter-spacing: 1.8px;
 }
 
 .signup-intro-content h2 {
@@ -130,11 +130,11 @@
 
   font-size: clamp(38px, 3.8vw, 55px);
 
-  line-height: 1.08;
+  line-height: 1.1;
 
   font-weight: 800;
 
-  letter-spacing: -2.5px;
+  letter-spacing: -2px;
 }
 
 .signup-intro-content h2 span {
@@ -142,15 +142,16 @@
 }
 
 .signup-description {
-  max-width: 430px;
+  max-width: 440px;
 
   margin: 24px 0 34px;
 
-  color: #716275;
+  color: #635467;
 
-  font-size: 13px;
+  font-size: 15.5px;
+  font-weight: 600;
 
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 
@@ -173,8 +174,8 @@
 }
 
 .point-icon {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
@@ -182,42 +183,44 @@
 
   flex-shrink: 0;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.65);
 
   color: #76547d;
 
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .signup-point h3 {
   margin: 0 0 3px;
 
-  color: #443249;
+  color: #3d2843;
 
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 15.5px;
+  font-weight: 800;
 }
 
 .signup-point p {
   margin: 0;
 
-  color: #806f83;
+  color: #716074;
 
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .signup-intro-footer {
   margin: 0;
 
-  color: #927e95;
+  color: #7c6880;
 
-  font-size: 9px;
-  font-weight: 600;
+  font-size: 12.5px;
+  font-weight: 700;
 
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 
@@ -271,10 +274,10 @@
 
   color: #96799d;
 
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 800;
 
-  letter-spacing: 1.6px;
+  letter-spacing: 1.8px;
 }
 
 .signup-heading h2 {
@@ -282,18 +285,19 @@
 
   color: #302536;
 
-  font-size: 25px;
+  font-size: 28px;
   font-weight: 800;
 
-  letter-spacing: -0.8px;
+  letter-spacing: -0.6px;
 }
 
 .signup-heading > p:last-child {
   margin: 8px 0 25px;
 
-  color: #817582;
+  color: #6b5c6d;
 
-  font-size: 11px;
+  font-size: 14.5px;
+  font-weight: 600;
 }
 
 
@@ -304,7 +308,7 @@
 .signup-input-group {
   flex: 1;
 
-  margin-bottom: 17px;
+  margin-bottom: 18px;
 }
 
 .signup-input-group label {
@@ -312,22 +316,22 @@
 
   margin-bottom: 7px;
 
-  color: #49384d;
+  color: #3d2943;
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
 .signup-input-group input,
 .signup-input-group select {
   width: 100%;
-  height: 43px;
+  height: 48px;
 
-  padding: 0 12px;
+  padding: 0 14px;
 
-  border: 1px solid #e6dfe8;
+  border: 1.5px solid #dfd6e2;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
   outline: none;
 
@@ -337,13 +341,16 @@
 
   font-family: "Manrope", sans-serif;
 
-  font-size: 11px;
+  font-size: 14.5px;
+  font-weight: 600;
 
   transition: 0.2s ease;
 }
 
 .signup-input-group input::placeholder {
-  color: #aaa1ac;
+  color: #9c919e;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .signup-input-group input:focus,
@@ -351,7 +358,7 @@
   border-color: #a98aaf;
 
   box-shadow:
-    0 0 0 3px rgba(169, 138, 175, 0.12);
+    0 0 0 3px rgba(169, 138, 175, 0.16);
 }
 
 .signup-input-group select {
@@ -399,13 +406,14 @@
   display: flex;
   align-items: flex-start;
 
-  gap: 8px;
+  gap: 9px;
 
-  margin: 2px 0 20px;
+  margin: 4px 0 22px;
 
-  color: #817582;
+  color: #5d4d60;
 
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 600;
 
   line-height: 1.5;
 
@@ -413,14 +421,15 @@
 }
 
 .terms-option input {
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
 
-  margin-top: 1px;
+  margin-top: 2px;
 
   flex-shrink: 0;
 
   accent-color: #76547d;
+  cursor: pointer;
 }
 
 .terms-option button {
@@ -434,9 +443,9 @@
 
   font-family: "Manrope", sans-serif;
 
-  font-size: 9px;
+  font-size: 13px;
 
-  font-weight: 700;
+  font-weight: 800;
 
   cursor: pointer;
 }
@@ -448,7 +457,7 @@
 
 .signup-button {
   width: 100%;
-  height: 45px;
+  height: 50px;
 
   display: flex;
   align-items: center;
@@ -458,7 +467,7 @@
 
   border: none;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
   background: #76547d;
 
@@ -466,9 +475,10 @@
 
   font-family: "Manrope", sans-serif;
 
-  font-size: 11px;
+  font-size: 15px;
 
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.3px;
 
   cursor: pointer;
 
@@ -476,7 +486,7 @@
 }
 
 .signup-button span {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .signup-button:hover {
@@ -485,7 +495,7 @@
   transform: translateY(-1px);
 
   box-shadow:
-    0 8px 18px rgba(107, 74, 114, 0.18);
+    0 8px 18px rgba(107, 74, 114, 0.22);
 }
 
 
@@ -494,21 +504,22 @@
 ========================================= */
 
 .signup-login-text {
-  margin-top: 20px;
+  margin-top: 22px;
 
-  color: #817582;
+  color: #6d5d70;
 
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
 
   text-align: center;
 }
 
 .signup-login-text a {
-  margin-left: 5px;
+  margin-left: 6px;
 
   color: #6b4a72;
 
-  font-weight: 700;
+  font-weight: 800;
 
   text-decoration: none;
 }

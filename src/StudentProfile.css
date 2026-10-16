@@ -175,14 +175,16 @@
 
 .student-profile-mini strong {
   display: block;
-  font-size: 12px;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
 .student-profile-mini span {
   display: block;
   margin-top: 3px;
   color: #887b8b;
-  font-size: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
 }
 
 /* OVERVIEW */
@@ -219,22 +221,23 @@
 
 .student-profile-overview-info h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
 }
 
 .student-profile-overview-info p {
   margin: 5px 0 0;
   color: #6b4a72;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .student-profile-overview-info span {
   display: block;
   margin-top: 4px;
   color: #887b8b;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .student-edit-btn {
@@ -245,8 +248,8 @@
   background: #6b4a72;
   color: #ffffff;
   font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   cursor: pointer;
   transition: 0.2s ease;
 }
@@ -273,14 +276,15 @@
 
 .student-profile-card-header h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
 }
 
 .student-profile-card-header p {
   margin: 5px 0 0;
   color: #877b89;
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* DETAILS */
@@ -305,16 +309,16 @@
 .student-detail-item span {
   display: block;
   color: #9a909d;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .student-detail-item strong {
   display: block;
   margin-top: 7px;
   color: #302536;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   word-break: break-word;
 }
 
@@ -338,8 +342,8 @@
 .student-profile-field label {
   margin-bottom: 7px;
   color: #665a6a;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .student-profile-field input {
@@ -351,7 +355,8 @@
   background: #ffffff;
   color: #302536;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .student-profile-field input:focus {
@@ -367,7 +372,8 @@
 .student-profile-field small {
   margin-top: 5px;
   color: #9a909d;
-  font-size: 9px;
+  font-size: 11.5px;
+  font-weight: 600;
 }
 
 .student-profile-form-actions {
@@ -383,8 +389,8 @@
   padding: 0 15px;
   border-radius: 8px;
   font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   cursor: pointer;
 }
 

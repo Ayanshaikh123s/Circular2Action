@@ -130,7 +130,7 @@
 
 .institution-sub {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
   color: #6366f1;
@@ -139,7 +139,7 @@
 
 .institution-name {
   margin: 3px 0 2px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 900;
   color: #0f172a;
   letter-spacing: -0.2px;
@@ -148,9 +148,9 @@
 
 .institution-dept {
   margin: 0;
-  font-size: 10.5px;
+  font-size: 12px;
   color: #64748b;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .institution-meta-badge {
@@ -164,7 +164,7 @@
 
 .meta-ref-label {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
   color: #94a3b8;
   letter-spacing: 1px;
@@ -172,14 +172,15 @@
 
 .meta-ref-val {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   color: #0f172a;
 }
 
 .meta-date {
   display: block;
-  font-size: 9.5px;
+  font-size: 11.5px;
+  font-weight: 600;
   color: #64748b;
   margin-top: 2px;
 }
@@ -242,7 +243,7 @@
   gap: 5px;
   padding: 5px 12px;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 800;
   letter-spacing: 0.5px;
   backdrop-filter: blur(6px);
@@ -280,7 +281,7 @@
 
 .poster-title {
   margin: 0 0 10px;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1.25;
   letter-spacing: -0.5px;
@@ -290,8 +291,8 @@
 
 .poster-tagline {
   margin: 0;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12.5px;
+  font-weight: 800;
   letter-spacing: 1px;
   color: rgba(255, 255, 255, 0.9);
   text-transform: uppercase;
@@ -347,7 +348,7 @@
 
 .desc-text {
   margin: 0;
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.6;
   color: #334155;
   font-weight: 600;
@@ -384,7 +385,7 @@
 
 .hl-label {
   display: block;
-  font-size: 8.5px;
+  font-size: 10.5px;
   font-weight: 800;
   color: #64748b;
   letter-spacing: 0.8px;
@@ -393,7 +394,7 @@
 
 .hl-val {
   display: block;
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: 800;
   color: #0f172a;
   line-height: 1.25;
@@ -433,7 +434,7 @@
 
 .action-box-header h3 {
   margin: 0;
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 900;
   color: #92400e;
   letter-spacing: 0.5px;
@@ -441,7 +442,7 @@
 
 .action-box-text {
   margin: 0 0 10px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #78350f;
   line-height: 1.45;

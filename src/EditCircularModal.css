@@ -68,14 +68,15 @@
 
 .edit-header-title h3 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: #0f172a;
 }
 
 .edit-header-title p {
   margin: 0.15rem 0 0 0;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
+  font-weight: 600;
   color: #64748b;
 }
 
@@ -108,8 +109,8 @@
   border: 1px solid #fecaca;
   border-radius: 8px;
   color: #b91c1c;
-  font-size: 0.84rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 .edit-modal-form {
@@ -141,8 +142,8 @@
 }
 
 .edit-form-group label {
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.86rem;
+  font-weight: 800;
   color: #334155;
   letter-spacing: 0.02em;
 }
@@ -151,10 +152,11 @@
 .edit-form-group select,
 .edit-form-group textarea {
   width: 100%;
-  padding: 0.65rem 0.85rem;
+  padding: 0.7rem 0.9rem;
   border: 1.5px solid #cbd5e1;
   border-radius: 8px;
-  font-size: 0.88rem;
+  font-size: 0.94rem;
+  font-weight: 600;
   font-family: inherit;
   color: #0f172a;
   background: #ffffff;
@@ -188,8 +190,8 @@
 .edit-btn {
   padding: 0.65rem 1.25rem;
   border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;

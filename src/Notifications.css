@@ -115,7 +115,7 @@ body {
 .sidebar-brand h2 {
   margin: 0;
 
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 800;
 
   color: var(--text);
@@ -126,7 +126,7 @@ body {
 
   margin-top: 2px;
 
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 600;
 }
@@ -137,15 +137,15 @@ body {
 
 .nav-item {
   width: 100%;
-  min-height: 42px;
+  min-height: 44px;
 
   display: flex;
   align-items: center;
 
   gap: 11px;
 
-  padding: 10px 12px;
-  margin-bottom: 4px;
+  padding: 10px 14px;
+  margin-bottom: 5px;
 
   border-radius: 9px;
 
@@ -153,8 +153,8 @@ body {
 
   text-decoration: none;
 
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 700;
 
   transition: 0.2s ease;
 }
@@ -167,23 +167,23 @@ body {
 .nav-item.active {
   background: var(--lavender);
   color: var(--plum);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .nav-icon {
-  width: 20px;
+  width: 22px;
 
   text-align: center;
 
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .nav-section-title {
-  margin: 18px 10px 6px;
+  margin: 20px 12px 8px;
 
   color: var(--light-plum);
 
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
 
   letter-spacing: 1.3px;
@@ -192,8 +192,8 @@ body {
 .notification-count {
   margin-left: auto;
 
-  min-width: 19px;
-  height: 19px;
+  min-width: 20px;
+  height: 20px;
 
   display: flex;
   align-items: center;
@@ -204,7 +204,7 @@ body {
   background: var(--plum);
   color: white;
 
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
 }
 
@@ -256,7 +256,7 @@ body {
 
   color: var(--light-plum);
 
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
 
   letter-spacing: 1.5px;
@@ -265,7 +265,7 @@ body {
 .page-header h1 {
   margin: 0;
 
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 800;
 
   letter-spacing: -0.7px;
@@ -276,7 +276,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -289,14 +290,14 @@ body {
   background: var(--plum);
   color: white;
 
-  padding: 11px 17px;
+  padding: 12px 20px;
 
   border-radius: 8px;
 
   font-family: inherit;
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
 
   cursor: pointer;
 
@@ -319,14 +320,14 @@ body {
   background: white;
   color: var(--muted);
 
-  padding: 11px 17px;
+  padding: 12px 20px;
 
   border-radius: 8px;
 
   font-family: inherit;
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
 
   cursor: pointer;
 }
@@ -381,8 +382,8 @@ body {
 }
 
 .stat-icon {
-  width: 39px;
-  height: 39px;
+  width: 42px;
+  height: 42px;
 
   border-radius: 10px;
 
@@ -394,7 +395,8 @@ body {
   align-items: center;
   justify-content: center;
 
-  font-size: 17px;
+  font-size: 19px;
+  font-weight: 800;
 
   flex-shrink: 0;
 }
@@ -406,14 +408,14 @@ body {
 
   color: var(--muted);
 
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
 }
 
 .stat-card h3 {
   margin: 0;
 
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
 }
 
@@ -434,14 +436,14 @@ body {
 .search-box {
   flex: 1;
 
-  height: 40px;
+  height: 42px;
 
   display: flex;
   align-items: center;
 
   gap: 9px;
 
-  padding: 0 13px;
+  padding: 0 14px;
 
   background: white;
 
@@ -453,7 +455,7 @@ body {
 .search-box span {
   color: var(--light-plum);
 
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .search-box input {
@@ -466,13 +468,14 @@ body {
 
   font-family: inherit;
 
-  font-size: 11px;
+  font-size: 14.5px;
+  font-weight: 600;
 
   color: var(--text);
 }
 
 .filter-section select {
-  height: 40px;
+  height: 42px;
 
   min-width: 145px;
 
@@ -488,8 +491,8 @@ body {
 
   font-family: inherit;
 
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
 
   outline: none;
 }
@@ -519,7 +522,7 @@ body {
 .card-header h2 {
   margin: 0;
 
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 800;
 }
 
@@ -528,7 +531,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -560,7 +564,7 @@ body {
 
   color: #857989;
 
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
 
   text-transform: uppercase;
@@ -577,7 +581,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
 
   vertical-align: middle;
 }
@@ -593,18 +598,19 @@ body {
 .notification-title {
   color: var(--text);
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 14.5px;
+  font-weight: 800;
 
   margin-bottom: 4px;
 }
 
 .notification-message {
-  max-width: 230px;
+  max-width: 250px;
 
   color: #918792;
 
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 500;
 
   line-height: 1.5;
 }
@@ -619,7 +625,7 @@ body {
   align-items: center;
   justify-content: center;
 
-  padding: 5px 9px;
+  padding: 6px 11px;
 
   border-radius: 20px;
 
@@ -627,7 +633,7 @@ body {
 
   color: var(--plum);
 
-  font-size: 8px;
+  font-size: 12px;
 
   font-weight: 800;
 
@@ -641,11 +647,11 @@ body {
 .status-badge {
   display: inline-flex;
 
-  padding: 5px 9px;
+  padding: 6px 11px;
 
   border-radius: 20px;
 
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -678,8 +684,8 @@ body {
 
 .view-btn,
 .delete-btn {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 
   display: flex;
   align-items: center;
@@ -690,6 +696,7 @@ body {
   cursor: pointer;
 
   font-family: inherit;
+  font-size: 14px;
 
   transition: 0.2s ease;
 }
@@ -739,8 +746,8 @@ body {
 }
 
 .empty-state span {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
 
   display: flex;
   align-items: center;
@@ -758,7 +765,7 @@ body {
 .empty-state h3 {
   margin: 12px 0 3px;
 
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 800;
 }
 
@@ -767,7 +774,8 @@ body {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -791,8 +799,8 @@ body {
 }
 
 .integration-icon {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
 
   display: flex;
   align-items: center;
@@ -804,7 +812,7 @@ body {
 
   color: var(--plum);
 
-  font-size: 18px;
+  font-size: 19px;
 
   flex-shrink: 0;
 }
@@ -816,7 +824,7 @@ body {
 .integration-card span:first-child {
   color: var(--light-plum);
 
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
 
   letter-spacing: 1.2px;
@@ -825,7 +833,7 @@ body {
 .integration-card h3 {
   margin: 4px 0 3px;
 
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 800;
 }
 
@@ -834,13 +842,14 @@ body {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13.5px;
+  font-weight: 600;
 
   line-height: 1.6;
 }
 
 .coming-soon {
-  padding: 6px 9px;
+  padding: 6px 11px;
 
   border-radius: 20px;
 
@@ -850,7 +859,7 @@ body {
 
   color: var(--plum);
 
-  font-size: 8px;
+  font-size: 12px;
 
   font-weight: 800;
 
@@ -910,13 +919,13 @@ body {
 .modal-header h2 {
   margin: 0;
 
-  font-size: 19px;
+  font-size: 22px;
   font-weight: 800;
 }
 
 .close-btn {
-  width: 31px;
-  height: 31px;
+  width: 32px;
+  height: 32px;
 
   border: 1px solid var(--border);
 
@@ -950,8 +959,8 @@ body {
 
   color: var(--text);
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
 .form-group input,
@@ -969,7 +978,8 @@ body {
 
   font-family: inherit;
 
-  font-size: 10px;
+  font-size: 14px;
+  font-weight: 600;
 
   outline: none;
 
@@ -978,7 +988,7 @@ body {
 
 .form-group input,
 .form-group select {
-  height: 40px;
+  height: 42px;
 }
 
 .form-group textarea {

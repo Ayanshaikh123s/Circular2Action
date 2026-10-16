@@ -433,6 +433,24 @@
       "actionRequired": "",
       "priority": "Normal",
       "fileName": ""
+    },
+    {
+      "_id": "circ_1792053016856",
+      "id": 1792053016856,
+      "circularNumber": "",
+      "status": "Published",
+      "date": "15 Oct 2026",
+      "deadline": "—",
+      "createdAt": "2026-10-15T08:30:16.883Z",
+      "title": "koi nhu ayega kal",
+      "category": "Examination",
+      "description": "122",
+      "targetType": "all",
+      "targetValue": "",
+      "audience": "All Students",
+      "actionRequired": "",
+      "priority": "Normal",
+      "fileName": ""
     }
   ],
   "actions": [
@@ -1011,6 +1029,22 @@
       "message": "arragnment",
       "circular": "examination sitting arangmanet",
       "audience": "all student"
+    },
+    {
+      "_id": "notif_1792053016888",
+      "id": 1792053016888,
+      "sentDate": "15 Oct 2026",
+      "time": "Just now",
+      "status": "Delivered",
+      "unread": true,
+      "channel": "In-App",
+      "createdAt": "2026-10-15T08:30:16.889Z",
+      "title": "New circular: koi nhu ayega kal",
+      "message": "122",
+      "circular": "koi nhu ayega kal",
+      "audience": "All Students",
+      "category": "Examination",
+      "type": "Circular"
     }
   ],
   "categories": [

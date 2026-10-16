@@ -81,7 +81,7 @@
 
 .sidebar-brand h2 {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--text);
 }
@@ -89,7 +89,8 @@
 .sidebar-brand span {
   display: block;
   margin-top: 3px;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -110,8 +111,8 @@
   border-radius: 9px;
   color: #655b67;
   text-decoration: none;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   margin-bottom: 3px;
   transition: 0.2s ease;
 }
@@ -136,7 +137,7 @@
 .nav-section-title {
   margin: 18px 10px 5px;
   color: var(--light-plum);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.3px;
 }
@@ -149,7 +150,8 @@
   border-radius: 10px;
   background: var(--soft-plum);
   color: white;
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,14 +190,15 @@
 
 .page-eyebrow {
   color: var(--light-plum);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.5px;
 }
 
 .analytics-header h1 {
   margin: 6px 0 5px;
-  font-size: 29px;
+  font-size: 30px;
+  font-weight: 800;
   line-height: 1.2;
   color: var(--text);
 }
@@ -203,7 +206,8 @@
 .analytics-header p {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
 }
 
 .period-select {
@@ -214,8 +218,8 @@
   border-radius: 9px;
   color: var(--text);
   font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   outline: none;
   cursor: pointer;
 }
@@ -244,20 +248,22 @@
 
 .analytics-stat-card span {
   display: block;
-  font-size: 11px;
+  font-size: 13.5px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .analytics-stat-card strong {
   display: block;
   margin: 7px 0 4px;
-  font-size: 25px;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .analytics-stat-card small {
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--light-plum);
 }
 
@@ -287,13 +293,15 @@
 
 .card-heading h2 {
   margin: 0 0 5px;
-  font-size: 15px;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .card-heading p {
   margin: 0;
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--muted);
 }
 
@@ -313,12 +321,14 @@
 }
 
 .category-bar-label span {
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .category-bar-label strong {
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 800;
   color: var(--text);
 }
 
@@ -380,13 +390,15 @@
 }
 
 .donut-center strong {
-  font-size: 22px;
+  font-size: 26px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .donut-center span {
   margin-top: 2px;
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -410,12 +422,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .status-row strong {
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 800;
   color: var(--text);
 }
 
@@ -464,7 +478,7 @@
 
 .month-column > span {
   margin-bottom: 7px;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   font-weight: 700;
 }
@@ -486,7 +500,8 @@
 
 .month-column small {
   margin-top: 9px;
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--muted);
 }
 
@@ -513,12 +528,14 @@
 }
 
 .delivery-row span {
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
 .delivery-row strong {
-  font-size: 11px;
+  font-size: 13.5px;
+  font-weight: 800;
   color: var(--text);
 }
 
@@ -574,7 +591,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   flex-shrink: 0;
 }
@@ -587,7 +604,8 @@
 .active-category-info strong {
   display: block;
   margin-bottom: 6px;
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--text);
 }
 
@@ -608,7 +626,7 @@
 }
 
 .active-category-count {
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--soft-plum);
 }
@@ -652,14 +670,15 @@
 
 .analytics-info h3 {
   margin: 0 0 5px;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .analytics-info p {
   margin: 0;
-  font-size: 10px;
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.6;
   color: var(--muted);
 }
 

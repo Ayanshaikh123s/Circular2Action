@@ -229,13 +229,15 @@
 
 .academic-calendar-summary-card strong {
   display: block;
-  font-size: 21px;
+  font-size: 24px;
+  font-weight: 800;
 }
 
 .academic-calendar-summary-card p {
   margin: 3px 0 0;
   color: #817582;
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* CONTENT */
@@ -255,14 +257,15 @@
 
 .academic-calendar-toolbar h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
 }
 
 .academic-calendar-toolbar p {
   margin: 5px 0 0;
   color: #877b89;
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* MONTHS */
@@ -289,7 +292,7 @@
 
 .academic-month-header h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
 }
 
@@ -298,7 +301,7 @@
   border-radius: 6px;
   background: #eee5f0;
   color: #6b4a72;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -340,14 +343,14 @@
 }
 
 .academic-date-box strong {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1;
   font-weight: 800;
 }
 
 .academic-date-box span {
   margin-top: 4px;
-  font-size: 9px;
+  font-size: 11.5px;
   font-weight: 700;
 }
 
@@ -365,7 +368,7 @@
 
 .academic-event-title-row h4 {
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 800;
 }
 
@@ -374,7 +377,7 @@
   border-radius: 20px;
   background: #eee5f0;
   color: #6b4a72;
-  font-size: 8px;
+  font-size: 11.5px;
   font-weight: 800;
 }
 
@@ -406,7 +409,7 @@
 .academic-event-info p {
   margin: 7px 0 0;
   color: #877b89;
-  font-size: 10px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -419,8 +422,8 @@
   background: #ffffff;
   color: #6b4a72;
   font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 12.5px;
+  font-weight: 800;
   cursor: pointer;
   transition: 0.2s ease;
 }

@@ -98,7 +98,7 @@ select {
 
 .sidebar-brand h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 800;
 }
 
@@ -106,7 +106,8 @@ select {
   display: block;
   margin-top: 2px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -118,25 +119,25 @@ select {
 }
 
 .nav-section-title {
-  margin: 18px 10px 5px;
+  margin: 20px 10px 6px;
   color: var(--light-plum);
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.3px;
 }
 
 .nav-item {
-  min-height: 39px;
-  padding: 9px 11px;
-  margin-bottom: 3px;
+  min-height: 44px;
+  padding: 10px 14px;
+  margin-bottom: 4px;
   border-radius: 9px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   text-decoration: none;
   color: var(--muted);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 700;
   transition: 0.2s ease;
 }
 
@@ -152,22 +153,23 @@ select {
 }
 
 .nav-icon {
-  width: 18px;
+  width: 22px;
   text-align: center;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .notification-count {
   margin-left: auto;
-  min-width: 19px;
-  height: 19px;
+  min-width: 20px;
+  height: 20px;
   border-radius: 20px;
   background: var(--plum);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .sidebar-bottom {
@@ -204,7 +206,7 @@ select {
   display: block;
   margin-bottom: 7px;
   color: var(--light-plum);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1.6px;
 }
@@ -219,7 +221,8 @@ select {
 .page-header p {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -230,9 +233,9 @@ select {
   border: none;
   background: var(--plum);
   color: white;
-  padding: 11px 17px;
+  padding: 12px 20px;
   border-radius: 9px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
   transition: 0.2s ease;
@@ -274,7 +277,7 @@ select {
 .student-stat-card span {
   display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13.5px;
   font-weight: 700;
 }
 
@@ -290,7 +293,8 @@ select {
   display: block;
   margin-top: 5px;
   color: #9b919e;
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -314,12 +318,12 @@ select {
 }
 
 .search-box {
-  height: 40px;
+  height: 42px;
   border: 1px solid var(--border);
   border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 14px;
   gap: 8px;
 }
 
@@ -332,7 +336,8 @@ select {
   width: 100%;
   border: none;
   outline: none;
-  font-size: 11px;
+  font-size: 14.5px;
+  font-weight: 600;
   color: var(--text);
 }
 
@@ -341,14 +346,15 @@ select {
 }
 
 .filters-top select {
-  height: 40px;
-  padding: 0 10px;
+  height: 42px;
+  padding: 0 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: white;
   color: var(--muted);
   outline: none;
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -362,18 +368,20 @@ select {
   align-items: center;
   justify-content: space-between;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .table-header-row strong {
   color: var(--plum);
+  font-weight: 800;
 }
 
 .reset-btn {
   border: none;
   background: transparent;
   color: var(--plum);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -404,7 +412,7 @@ select {
   border-bottom: 1px solid var(--border);
   text-align: left;
   color: #817582;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -414,7 +422,8 @@ select {
   padding: 14px 18px;
   border-bottom: 1px solid #f0ebf1;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
   vertical-align: middle;
 }
 
@@ -448,7 +457,7 @@ select {
 .student-info strong {
   display: block;
   color: var(--text);
-  font-size: 10px;
+  font-size: 14.5px;
   font-weight: 800;
 }
 
@@ -456,7 +465,8 @@ select {
   display: block;
   margin-top: 3px;
   color: #988e9a;
-  font-size: 8px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* =========================
@@ -465,19 +475,19 @@ select {
 
 .course-badge {
   display: inline-flex;
-  padding: 5px 8px;
+  padding: 6px 10px;
   border-radius: 6px;
   background: #f3edf5;
   color: var(--plum);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
 }
 
 .status-badge {
   display: inline-flex;
-  padding: 5px 9px;
+  padding: 6px 11px;
   border-radius: 20px;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -504,11 +514,12 @@ select {
 .delete-btn {
   border: 1px solid var(--border);
   background: white;
-  padding: 6px 9px;
+  padding: 7px 12px;
   border-radius: 6px;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 800;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .view-btn {
@@ -536,6 +547,8 @@ select {
   text-align: center !important;
   padding: 40px !important;
   color: #9c929f !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
 }
 
 /* =========================
@@ -557,29 +570,30 @@ select {
 }
 
 .info-icon {
-  width: 27px;
-  height: 27px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--lavender);
   color: var(--plum);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   flex-shrink: 0;
 }
 
 .students-info h3 {
   margin: 0;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
 }
 
 .students-info p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1.6;
 }
 
@@ -617,18 +631,20 @@ select {
 
 .modal-header h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 800;
 }
 
 .modal-header p {
   margin: 5px 0 0;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
 .modal-close {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: none;
   background: #f7f2f8;
   color: var(--muted);
@@ -658,7 +674,7 @@ select {
 }
 
 .form-group label {
-  font-size: 9px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--text);
 }
@@ -666,14 +682,15 @@ select {
 .form-group input,
 .form-group select {
   width: 100%;
-  height: 40px;
-  padding: 0 11px;
+  height: 42px;
+  padding: 0 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   outline: none;
   color: var(--text);
   background: white;
-  font-size: 10px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .form-group input:focus,
@@ -699,9 +716,9 @@ select {
   border: 1px solid var(--border);
   background: white;
   color: var(--muted);
-  padding: 10px 16px;
+  padding: 10px 18px;
   border-radius: 8px;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
 }

@@ -90,8 +90,8 @@
   background: rgba(59, 130, 246, 0.2);
   border: 1px solid rgba(147, 197, 253, 0.35);
   border-radius: 9999px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 800;
   letter-spacing: 0.05em;
   color: #93c5fd;
   text-transform: uppercase;
@@ -120,10 +120,10 @@
 }
 
 .action-notif-pill {
-  padding: 0.22rem 0.65rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
   letter-spacing: 0.02em;
 }
 
@@ -166,7 +166,7 @@
 
 .action-notif-title {
   margin: 0.4rem 0 0.2rem;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 800;
   line-height: 1.35;
   color: #ffffff;
@@ -205,16 +205,16 @@
 }
 
 .action-origin-label {
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #64748b;
 }
 
 .action-origin-text {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.98rem;
+  font-weight: 800;
   color: #1e293b;
 }
 
@@ -242,8 +242,8 @@
 }
 
 .action-grid-label {
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: #64748b;
   display: flex;
   align-items: center;
@@ -251,8 +251,8 @@
 }
 
 .action-grid-value {
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.96rem;
+  font-weight: 800;
   color: #0f172a;
 }
 
@@ -268,7 +268,7 @@
 }
 
 .action-directive-heading {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -283,7 +283,8 @@
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
   border-radius: 14px;
-  font-size: 0.92rem;
+  font-size: 0.98rem;
+  font-weight: 600;
   line-height: 1.6;
   color: #334155;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -310,13 +311,14 @@
 }
 
 .action-interactive-label {
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
   color: #1e293b;
 }
 
 .action-interactive-sub {
-  font-size: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
   color: #64748b;
 }
 
@@ -327,10 +329,10 @@
 }
 
 .status-toggle-btn {
-  padding: 0.5rem 0.9rem;
+  padding: 0.55rem 0.95rem;
   border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.88rem;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.18s ease;
   display: inline-flex;
@@ -380,7 +382,7 @@
   border: 1px solid #86efac;
   color: #15803d;
   border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.86rem;
+  font-weight: 700;
   animation: fadeIn 0.2s ease;
 }
